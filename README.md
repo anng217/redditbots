@@ -2,4 +2,5 @@
 - app: botstudy
 - personal use script BMqT9-TtQsS95OJUScGvGw	
 - secret: Y3FARMDLa1zm2NcbwAwuNrJR_IdNag
-MIA KITTY MIA KITTY
+
+BABE DUMB DUMB
