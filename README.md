@@ -9,3 +9,8 @@
 - Open Anaconda Prompt
 - Script
 `\pip.exe install google-api-python-client`
+
+### Note
+Perspective API only allows running single instances. Rate limit is 1 second/instance.
+
+## Detoxify: [Git Repo](https://github.com/unitaryai/detoxify)
