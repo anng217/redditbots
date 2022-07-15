@@ -3,6 +3,7 @@
 - Upvote for comments
 - Upvote for submissions
 - Non-text submissions
+- Clean internet characters
 
 ## Reddit REST API
 
