@@ -1,3 +1,9 @@
+## Concerns:
+- Recover deleted comments
+- Upvote for comments
+- Upvote for submissions
+- Non-text submissions
+
 ## Reddit REST API
 
 - app: botstudy
