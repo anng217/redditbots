@@ -1,19 +1,18 @@
 # Data Cleaning Process
 With respect to detoxify.ipynb
 
-## Comments
-Cleaning comments by removing all the `author` = 'AutoModerator', all the `body` = '[removed]' or `body` = '[deleted]'
+- For Comments: Cleaning comments by removing all the `author` = 'AutoModerator', all the `body` = '[removed]' or `body` = '[deleted]'
+- For Submissions: Cleaning submissions by removing all contents that has no content (`selftext` is null), and content is 
 
-| Community   | Before (Origin) | Before (Clean) | After (Origin) | After (Clean) | Before-After Period|
-|-------------|-----------------|----------------|----------------|---------------|--------------------|
-| r/femaledatingstrategy| 15,823 | 13,354        | 32,373         | 24,038        |  Oct-Nov           |
-
-## Submission
-Cleaning submissions by removing all contents that has no content (`selftext` is null), and content is 
-
-| Community   | Before (Origin) | Before (Clean) | After (Origin) | After (Clean) | Before-After Period|
-|-------------|-----------------|----------------|----------------|---------------|--------------------|
-| r/femaledatingstrategy| 3,397 | 2,128          | XXXXXX        | XXXXXX       |  Oct-Nov           |
+| Community              | Type        | Before (Origin) | Before (Clean)            | After (Origin) | After (Clean)             | Before-After Period |
+|------------------------|-------------|-----------------|---------------------------|----------------|---------------------------|---------------------|
+| r/femaledatingstrategy | Comments    | 15,823          | 13,354                    | 32,373         | 24,038                    | Oct-Nov 2019        |
+|                        | Submissions | 3,397           | 2,128 (Text) X,XXX (Meme) |                | X,XXX (Text) X,XXX (Meme) |                     |
+| r/women                | Comments    | 806             |                           | 715            |                           | Jun-Jul 2016        |
+|                        | Submissions | 2,036           |                           | 1,862          |                           |                     |
+| r/feminisms            | Comments    | 3,862           |                           | 4,211          |                           |                     |
+|                        |             |                 |                           |                |                           |                     |
+|                        |             |                 |                           |                |                           |                     |
 
 # Female Dating Strategy Toxicity
 
