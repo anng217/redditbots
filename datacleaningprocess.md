@@ -47,10 +47,10 @@ Cleaning submissions by removing all contents that has no content (`selftext` is
 
 |                        |     Oct   (Mean)    |     Nov   (Mean)    |     Difference    |     P-value      |
 |------------------------|---------------------|---------------------|-------------------|------------------|
-| toxicity_flag          | 23.49%              | 23.03%              | -0.00460          | 0.3126           |
-| severe_toxicity_flag   | 8.92%               | 0.47%               | -0.08448          | 0.1985           |
-| obscene_flag           | 1.42%               | 13.75%              | -0.00418          | 0.0269           |
-| threat_flag            | 0.20%               | 7.40%               | 0.072027          | 2.2939 x 10^-215 |
-| insult_flag            | 0.101393            | 0.094226            | -0.00716          | 0.02471          |
-| identity_attack_flag   | 0.005017            | 0.003203            | -0.00181          | 0.0067           |
-| sexual_explicit_flag   | 0.070990            | 0.072635            | 0.001645          | 0.5556           |
+| toxicity_flag          | 23.49%              | 23.03%              | -0.46%            | 0.3126           |
+| severe_toxicity_flag   | 8.92%               | 8.53%               | -0.39%            | 0.1985           |
+| obscene_flag           | 14.18%              | 13.75%              | -0.42%            | 0.0269           |
+| threat_flag            | 0.20%               | 7.40%               | 7.2%              | 2.2939 x 10^-215 |
+| insult_flag            | 10.14%              | 9.42%               | -0.72%            | 0.02471          |
+| identity_attack_flag   | 0.5%                | 0.32%               | -0.18%            | 0.0067           |
+| sexual_explicit_flag   | 7.10%               | 7.26%               | 0.16%             | 0.5556           |
