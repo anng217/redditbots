@@ -83,4 +83,14 @@ The problem with control group is that it could also be neighbor. So I explore t
 | r/askwomenoverthirty      |                                  |                    |                   |
 | **_Opposite Topic_**      |                                  |                    |                   |
 | r/mgtow                   |                                  | 93,202             | 92,201            |
-| r/TheRedPill              | Oct 25, 2012                     |                    |                   |
+| r/TheRedPill              | Oct 25, 2012                     | 9,737              |  9,327            |
+
+## r/feminism
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
+|---------------------|----------------|----------------|----------------|-------------|
+| **toxicity**        | 0.1794         | 0.1680         | -0.0114        | 0.063       |
+| **severe_toxicity** | 0.0088         | 0.0085         | -0.0003        | 0.733       |
+| **obscene**         | 0.0891         | 0.0849         | -0.0042        | 0.379       |
+| **threat**          | 0.0042         | 0.0038         | -0.0004        | 0.594       |
+| **insult**          | 0.0516         | 0.0511         | -0.0005        | 0.879       |
+| **identity_attack** | 0.0184         | 0.1529         | 0.1345         | 0.029       |
