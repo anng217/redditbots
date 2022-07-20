@@ -1,4 +1,5 @@
 # Data Cleaning Process
+
 With respect to detoxify.ipynb
 
 - For Comments: Cleaning comments by removing all the `author` = 'AutoModerator', all the `body` = '[removed]' or `body` = '[deleted]'
@@ -94,10 +95,9 @@ The problem with control group is that it could also be neighbor. So I explore t
 | **obscene**         | 0.0891         | 0.0849         | -0.0042        | 0.379       |
 | **threat**          | 0.0042         | 0.0038         | -0.0004        | 0.594       |
 | **insult**          | 0.0516         | 0.0511         | -0.0005        | 0.879       |
-| **identity_attack** | 0.0184         | 0.1529         | 0.1345         | 0.029       |
+| **identity_attack** | **0.0184**        | **0.1529**         | **0.1345**         | **0.029**       |
 
 ### Base line for percentage
-(click "Generate" to refresh) Copy to clipboard  Preview
 |                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
 |---------------------|----------------|----------------|----------------|-------------|
 | **toxicity**        | 0.162950       | 0.153433       | -0.95%         | 0.1988      |
