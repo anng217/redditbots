@@ -171,8 +171,10 @@ The problem with control group is that it could also be neighbor. So I explore t
 - Outcome: identity_attack of FDS before and after bot impplementation
 - Covars: subscribers of FDS, identity_attack of r/feminism, r/WitchesVSPatriarchy, and r/TwoXChromosomes
 
+**Average of Identity Attack**
 ![Average of Identity Attack](https://github.com/anng217/redditbots/blob/main/unb_identityattack_m_fds.png?raw=true)
 
+**Precentage of Identity Attack Comments**
 ![Precentage of Identity Attack Comments](https://github.com/anng217/redditbots/blob/main/unb_identityattack_p_fds.png?raw=true)
 
 # Next steps:

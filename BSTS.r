@@ -18,6 +18,7 @@ library(viridis)
 library(paletteer)
 library(reshape2)
 library(lubridate)
+library(CausalImpact)
 
 # Working directory
 setwd('E:/github/redditbots')
@@ -87,7 +88,24 @@ twoX <- rbind(twoX_pre_clean, twoX_post_clean)[-31,]
 
 wvsp_pre_clean <- clean(wvsp_pre,post=0)
 wvsp_post_clean <- clean(wvsp_post,post=1)
-wvsp <- rbind(wvsp_pre_clean, wvsp_post_clean)
+wvsp <- rbind(wvsp_pre_clean, wvsp_post_clean)[-31,]
 
-#join fds and fm and subsc
-df <- left_join(fds_df,fm_df,suffix=c('.treat','.control'))
+
+#identity attack
+test <- cbind(fds_df['identity_attack_m'],fds_subsc['subscriber'],fm_df['identity_attack_m'],twoX['identity_attack_m'],wvsp['identity_attack_m'])
+
+
+test <- cbind(fds_df['identity_attack_p'],fds_subsc['subscriber'],fm_df['identity_attack_p'],
+              twoX['identity_attack_p'],wvsp['identity_attack_p'])
+
+names(test)[1] <- 'Y'
+names(test)[3] <- 'feminism'
+names(test)[4] <- 'twoX'
+names(test)[5] <- 'wvsp'
+
+
+
+pre.period <- c(1, 30)
+post.period <- c(31, 61)
+
+impact <- CausalImpact(test, pre.period, post.period,  model.args = list(niter = 5000, nseasons = 7))
