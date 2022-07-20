@@ -86,6 +86,7 @@ The problem with control group is that it could also be neighbor. So I explore t
 | r/TheRedPill              | Oct 25, 2012                     | 9,737              |  9,327            |
 
 ## r/feminism
+### Base line
 |                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
 |---------------------|----------------|----------------|----------------|-------------|
 | **toxicity**        | 0.1794         | 0.1680         | -0.0114        | 0.063       |
