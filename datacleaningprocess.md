@@ -38,6 +38,8 @@ With respect to detoxify.ipynb
 
 
 ## Unbiased Model for average
+**About Unbiased Model:** A model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identitied.
+
 |                           |     Oct   (Mean)    |     Nov   (Mean)    |     Difference    |     P-value     |
 |---------------------------|---------------------|---------------------|-------------------|-----------------|
 |     toxicity              | 0.239328            | 0.233624            | -0.005704         | 0.13658         |
@@ -64,5 +66,21 @@ With respect to detoxify.ipynb
 # Control Group
 The problem with control group is that it could also be neighbor. So I explore these group first:
 
-**Control/Neighbor suspects**
-r/
+**Control/Neighbor**
+
+| **Community**             | **Created Date**<br>*(Bot Date)* | **Before (Clean)** | **After (Clean)** |
+|---------------------------|----------------------------------|--------------------|-------------------|
+| **_Uses Bot Eventually_** |                                  |                    |                   |
+| r/wgotw                   | May 21, 2014<br>*(Apr 29, 2021)* | NA                 |                   |
+| r/WitchesVSPatriarchy     | Sep 27, 2018<br>*(Dec 22, 2020)* |                    |                   |
+| r/exfds                   | Mar 14, 2020<br>*(Nov 23, 2020)* | NA                 |                   |
+| **_Does not use bots_**   |                                  |                    |                   |
+| r/TwoXChromosomes         | Jul 16, 2009                     | 67,713             | 69,252            |
+| r/feminism                | Jan 10, 2009                     | 4,529              | 5,241             |
+| **_Users overlap_**       |                                  |                    |                   |
+| r/purplepilldebate        | Aug 22, 2013                     |                    |                   |
+| r/datingoverthirty        | Nov 3, 2014                      |                    |                   |
+| r/askwomenoverthirty      |                                  |                    |                   |
+| **_Opposite Topic_**      |                                  |                    |                   |
+| r/mgtow                   |                                  | 93,202             | 92,201            |
+| r/TheRedPill              | Oct 25, 2012                     |                    |                   |
