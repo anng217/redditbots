@@ -4,15 +4,26 @@ With respect to detoxify.ipynb
 - For Comments: Cleaning comments by removing all the `author` = 'AutoModerator', all the `body` = '[removed]' or `body` = '[deleted]'
 - For Submissions: Cleaning submissions by removing all contents that has no content (`selftext` is null), and content is 
 
-| Community              | Type        | Before (Origin) | Before (Clean)            | After (Origin) | After (Clean)             | Before-After Period |
-|------------------------|-------------|-----------------|---------------------------|----------------|---------------------------|---------------------|
-| r/femaledatingstrategy | Comments    | 15,823          | 13,354                    | 32,373         | 24,038                    | Oct-Nov 2019        |
-|                        | Submissions | 3,397           | 2,128 (Text) X,XXX (Meme) |                | X,XXX (Text) X,XXX (Meme) |                     |
-| r/women                | Comments    | 806             |                           | 715            |                           | Jun-Jul 2016        |
-|                        | Submissions | 2,036           |                           | 1,862          |                           |                     |
-| r/feminisms            | Comments    | 3,862           |                           | 4,211          |                           |                     |
-|                        |             |                 |                           |                |                           |                     |
-|                        |             |                 |                           |                |                           |                     |
+| No. | Community              | Type        | Before (Orig.) | Before (Clean)           | After (Orig.) | After (Clean)           |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
+| 1   | r/femaledatingstrategy | Comments    | 16,028         | 13,485                   | 31,357        | 23,149                  |
+|     |                        | Submissions | 894            | 432 (Text) 159(Images)   | 1901          | 596 (Text) 432 (Images) |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
+| 2   | r/women                | Comments    | 271            | 214                      | 201           | 154                     |
+|     |                        | Submissions | 550            | 15 (Text) 11 (Images)    | 682           | 11 (Text) 7 (Images)    |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
+| 3   | r/feminisms            | Comments    | 1,288          | 906                      | 1,152         | 899                     |
+|     |                        | Submissions | 328            | 19 (Text) 4 (Images)     | 244           | 16 (Text) 5 (Images)    |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
+| 4   | r/wgtow                | Comments    | 842            | 763                      | 1,285         | 1164                    |
+|     |                        | Submissions | 87             | 34 (Text) 7 (Images)     | 135           | 61 (Text) 22 (Images)   |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
+| 5   | r/WitchesVSPatriarchy  | Comments    | 23,015         | 15,610                   | 20,879        | 20,879                  |
+|     |                        | Submissions | 1,664          | 238(Text) 1,004 (Images) | 1,411         | 175 (Text) 894 (Images) |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
+| 6   | r/exfds                | Comments    | 468            | 452                      | 132           | 127                     |
+|     |                        | Submissions | 32             | 15 (Text) 10 (Images)    | 12            | 20 (Text) 3 (Images)    |
+|-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
 
 # Female Dating Strategy Toxicity
 
