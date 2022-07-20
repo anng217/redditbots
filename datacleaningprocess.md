@@ -2,7 +2,8 @@
 With respect to detoxify.ipynb
 
 - For Comments: Cleaning comments by removing all the `author` = 'AutoModerator', all the `body` = '[removed]' or `body` = '[deleted]'
-- For Submissions: Cleaning submissions by removing all contents that has no content (`selftext` is null), and content is 
+- For Submissions: Cleaning submissions by removing all contents that has no content (`selftext` is null), all the `selftext` is  = '[removed]' or `selftext` = '[deleted]'
+
 
 | No. | Community              | Type        | Before (Orig.) | Before (Clean)           | After (Orig.) | After (Clean)           |
 |-----|------------------------|-------------|----------------|--------------------------|---------------|-------------------------|
