@@ -86,7 +86,7 @@ The problem with control group is that it could also be neighbor. So I explore t
 | r/TheRedPill              | Oct 25, 2012                     | 9,737              |  9,327            |
 
 ## r/feminism
-### Base line
+### Base line for average
 |                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
 |---------------------|----------------|----------------|----------------|-------------|
 | **toxicity**        | 0.1794         | 0.1680         | -0.0114        | 0.063       |
@@ -95,3 +95,25 @@ The problem with control group is that it could also be neighbor. So I explore t
 | **threat**          | 0.0042         | 0.0038         | -0.0004        | 0.594       |
 | **insult**          | 0.0516         | 0.0511         | -0.0005        | 0.879       |
 | **identity_attack** | 0.0184         | 0.1529         | 0.1345         | 0.029       |
+
+### Base line for percentage
+(click "Generate" to refresh) Copy to clipboard  Preview
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
+|---------------------|----------------|----------------|----------------|-------------|
+| **toxicity**        | 0.162950       | 0.153433       | -0.95%         | 0.1988      |
+| **severe_toxicity** | 0.001546       | 0.001343       | -0.02%         | 0.7918      |
+| **obscene**         | 0.087437       | 0.079402       | -0.80%         | 0.1519      |
+| **threat**          | 0.002208       | 0.001918       | -0.03%         | 0.7524      |
+| **insult**          | 0.036653       | 0.036824       | 0.02%          | 0.1527      |
+| **identity_attack** | **0.006403**   | **0.005754**   | **-0.06%**     | **0.0293**  |
+
+## Unbiased Model for average
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
+|---------------------|----------------|----------------|----------------|-------------|
+| **toxicity**        | 0.178182       | 0.171350       | -0.00683       | 0.2739      |
+| **severe_toxicity** | 0.003853       | 0.003512       | -0.00683       | 0.4735      |
+| **obscene**         | 0.076309       | 0.075908       | -0.00034       | 0.9316      |
+| **threat**          | 0.032643       | 0.026996       | -0.0004        | 0.9361      |
+| **insult**          | 0.073435       | 0.080117       | -0.0056        | 0.1061      |
+| **identity_attack** | **0.004031**   | **0.003967**   | **0.006682**   | **0.0040**  |
+| **sexual explicit** | 0.059691       | 0.049408       | -6.4E-05       | 0.9075      |
