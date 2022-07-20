@@ -86,7 +86,7 @@ The problem with control group is that it could also be neighbor. So I explore t
 | r/mgtow                   |                                  | 93,202             | 92,201            |
 | r/TheRedPill              | Oct 25, 2012                     | 9,737              |  9,327            |
 
-## r/feminism
+## r/feminism as Control for FDS
 ### Base line for average
 |                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
 |---------------------|----------------|----------------|----------------|-------------|
@@ -117,3 +117,40 @@ The problem with control group is that it could also be neighbor. So I explore t
 | **insult**          | 0.073435       | 0.080117       | -0.0056        | 0.1061      |
 | **identity_attack** | **0.004031**   | **0.003967**   | **0.006682**   | **0.0040**  |
 | **sexual explicit** | 0.059691       | 0.049408       | -6.4E-05       | 0.9075      |
+
+## Unbiased Model for percentage
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
+|---------------------|----------------|----------------|----------------|-------------|
+| **toxicity**        | 15.99%         | 15.90%         | -0.09%         | 0.9075      |
+| **severe_toxicity** | 0.044%         | 0.00%          | -0.04%         | 0.1291      |
+| **obscene**         | 7.83%          | 7.90%          | 0.07%          | 0.9077      |
+| **threat**          | 0.22%          | 0.21%          | -0.01%         | 0.9169      |
+| **insult**          | 5.98%          | 6.66%          | 0.68%          | 0.1061      |
+| **identity_attack** | **1.43%**      | **1.30%**      | **-0.13%**     | **0.0040**  |
+| **sexual_implicit** | **5.23%**      | **4.09%**      | **-1.14%**     | **0.0071**  |
+
+## r/TwoXChromosomes as Control for FDS
+
+## Unbiased Model for average
+
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
+|---------------------|----------------|----------------|----------------|-------------|
+| **toxicity**        | 0.18884        |                |                |             |
+| **severe_toxicity** | 0.00324        |                |                |             |
+| **obscene**         | 0.09652        |                |                |             |
+| **threat**          | 0.00482        |                |                |             |
+| **insult**          | 0.08227        |                |                |             |
+| **identity_attack** | 0.00840        |                |                |             |
+| **sexual_implicit** | 0.06349        |                |                |             |
+
+## Unbiased Model for Percentage (Flag)
+
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
+|---------------------|----------------|----------------|----------------|-------------|
+| **toxicity**        | 17.98%         |                |                |             |
+| **severe_toxicity** | 0.003%         |                |                |             |
+| **obscene**         | 10.02%         |                |                |             |
+| **threat**          | 0.26%          |                |                |             |
+| **insult**          | 6.98%          |                |                |             |
+| **identity_attack** | 0.25%          |                |                |             |
+| **sexual_implicit** | 5.67%          |                |                |             |
