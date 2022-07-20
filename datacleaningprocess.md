@@ -178,5 +178,8 @@ The problem with control group is that it could also be neighbor. So I explore t
 ![Precentage of Identity Attack Comments](https://github.com/anng217/redditbots/blob/main/unb_identityattack_p_fds.png?raw=true)
 
 # Next steps:
- - Run with baseline model. Find examples to see how toxicity varies.
+- Explore different control communities: opposite communities, unrelated popular communities.
+- Run with baseline model with current control groups and other posible control groups.
+- Find examples to see how toxicity varies.
+- Standardize outcome variables
 
