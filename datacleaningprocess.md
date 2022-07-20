@@ -179,10 +179,10 @@ The problem with control group is that it could also be neighbor. So I explore t
 
 # Next steps:
 - Regression discontinuity for these control groups to see if the difference in toxicity/identity attack is robust.
-- Explore different control communities: opposite communities, unrelated popular communities.
+- Explore unbiased model different control communities: opposite communities, unrelated popular communities.
 - Explore HateBERT for FDS and different control communities.
 - Run with baseline model with current control groups and other posible control groups.
 - Find examples to see how toxicity varies.
 - Standardize outcome variables
-
+- Submissions: analyze toxicity in title, body. Memes: Facebook Dataset.
 
