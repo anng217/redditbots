@@ -39,6 +39,16 @@ With respect to detoxify.ipynb
 
 
 ## Unbiased Model for average
+|                          |     Oct   (Perc)    |     Nov   (Perc)    |     Difference    |     P-value         |
+|--------------------------|---------------------|---------------------|-------------------|---------------------|
+| **toxicity_flag**        | **23.40%**          | **22.01%**          | **-1.39%**        | **0.00140**         |
+| **severe_toxicity_flag** | 0.0762%             | 0.0625%             | -0.01%            | 0.61401             |
+| **obscene_flag**         | 14.72%              | 14.35%              | -0.37%            | 0.31422             |
+| **threat_flag**          | 0.15%               | 0.16%               | 0.01%             | 0.64951             |
+| **insult_flag**          | **7.16%**           | **6.15%**           | **-1.01%**        | **8.75518 x 10^-5** |
+| **identity_attack_flag** | **0.3809%**         | **0.2384%**         | **-0.14%**        | **0.01091**         |
+
+
 **About Unbiased Model:** A model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identitied.
 
 |                           |     Oct   (Mean)    |     Nov   (Mean)    |     Difference    |     P-value     |
@@ -54,15 +64,15 @@ With respect to detoxify.ipynb
 
 ## Unbiased Model - Percentage of comments flagged
 
-|                        |     Oct   (Mean)    |     Nov   (Mean)    |     Difference    |     P-value      |
-|------------------------|---------------------|---------------------|-------------------|------------------|
-| toxicity_flag          | 23.49%              | 23.03%              | -0.46%            | 0.3126           |
-| severe_toxicity_flag   | 8.92%               | 8.53%               | -0.39%            | 0.1985           |
-| **obscene_flag**           | 14.18%              | 13.75%              | -0.42%            | **0.0269**           |
-| **threat_flag**            | 0.20%               | 7.40%               | 7.2%              | **2.2939 x 10^-215** |
-| **insult_flag**           | 10.14%              | 9.42%               | -0.72%            | **0.02471**          |
-| **identity_attack_flag**   | 0.5%                | 0.32%               | -0.18%            | **0.0067**           |
-| sexual_explicit_flag   | 7.10%               | 7.26%               | 0.16%             | 0.5556           |
+|                          | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value**          |
+|--------------------------|----------------|----------------|----------------|----------------------|
+| **toxicity_flag**        | 23.49%         | 23.03%         | -0.46%         | 0.3126               |
+| **severe_toxicity_flag** | 8.92%          | 8.53%          | -0.39%         | 0.1985               |
+| **obscene_flag**         | **14.18%**     | **13.75%**     | **-0.42%**     | **0.0269**           |
+| **threat_flag**          | **0.20%**      | **7.40%**      | **7.2%**       | **2.2939 x 10^-215** |
+| **insult_flag**          | **10.14%**     | **9.42%**      | **-0.72%**     | **0.02471**          |
+| **identity_attack_flag** | **0.5%**       | **0.32%**      | **-0.18%**     | **0.0067**           |
+| **sexual_explicit_flag** | 7.10%          | 7.26%          | 0.16%          | 0.5556               |
 
 # Control Group
 The problem with control group is that it could also be neighbor. So I explore these group first:
@@ -133,24 +143,38 @@ The problem with control group is that it could also be neighbor. So I explore t
 
 ## Unbiased Model for average
 
-|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
-|---------------------|----------------|----------------|----------------|-------------|
-| **toxicity**        | 0.18884        |                |                |             |
-| **severe_toxicity** | 0.00324        |                |                |             |
-| **obscene**         | 0.09652        |                |                |             |
-| **threat**          | 0.00482        |                |                |             |
-| **insult**          | 0.08227        |                |                |             |
-| **identity_attack** | 0.00840        |                |                |             |
-| **sexual_implicit** | 0.06349        |                |                |             |
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value**        |
+|---------------------|----------------|----------------|----------------|--------------------|
+| **toxicity**        | **0.18884**    |                |                | **9.052 x 10^-6**  |
+| **severe_toxicity** | 0.00324        |                |                | 0.4934             |
+| **obscene**         | 0.09652        |                |                | 0.7353             |
+| **threat**          | **0.00482**    |                |                | **0.0002**         |
+| **insult**          | 0.08227        |                |                | 0.8449             |
+| **identity_attack** | **0.00840**    |                |                | **2.7 x 10^-5**    |
+| **sexual_implicit** | **0.06349**    |                |                | **1.215 x 10^-30** |
 
 ## Unbiased Model for Percentage (Flag)
 
-|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value** |
-|---------------------|----------------|----------------|----------------|-------------|
-| **toxicity**        | 17.98%         |                |                |             |
-| **severe_toxicity** | 0.003%         |                |                |             |
-| **obscene**         | 10.02%         |                |                |             |
-| **threat**          | 0.26%          |                |                |             |
-| **insult**          | 6.98%          |                |                |             |
-| **identity_attack** | 0.25%          |                |                |             |
-| **sexual_implicit** | 5.67%          |                |                |             |
+
+|                     | **Oct (Mean)** | **Nov (Mean)** | **Difference** | **P-value**        |
+|---------------------|----------------|----------------|----------------|--------------------|
+| **toxicity**        | **17.98%**     |                |                | **0.0007**         |
+| **severe_toxicity** | 0.003%         |                |                | 0.4300             |
+| **obscene**         | 10.02%         |                |                | 0.3381             |
+| **threat**          | **0.26%**      |                |                | **0.0069**         |
+| **insult**          | 6.98%          |                |                | 0.8449             |
+| **identity_attack** | **0.25%**      |                |                | **2.707 x 10^-5**  |
+| **sexual_implicit** | **5.67%**      |                |                | **8.586 x 10^-19** |
+
+# Synthetic Control 
+
+- Outcome: identity_attack of FDS before and after bot impplementation
+- Covars: subscribers of FDS, identity_attack of r/feminism, r/WitchesVSPatriarchy, and r/TwoXChromosomes
+
+![Average of Identity Attack](https://github.com/anng217/redditbots/blob/main/unb_identityattack_m_fds.png?raw=true)
+
+![Precentage of Identity Attack Comments](https://github.com/anng217/redditbots/blob/main/unb_identityattack_p_fds.png?raw=true)
+
+# Next steps:
+ - Run with baseline model. Find examples to see how toxicity varies.
+
