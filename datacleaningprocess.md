@@ -21,6 +21,10 @@ With respect to detoxify.ipynb
 | 6   | r/exfds                | Comments    | 468            | 452                         | 132           | 127                        | Nov 23, 2020  |
 |     |                        | Submissions | 32             | 15 (Text)<br>10 (Images)    | 12            | 20 (Text)<br>3 (Images)    |               |
 
+**Files and folders:**
+- `{communityname}_comments.csv` and `{communityname}_subm.csv`: All comments and submissions *originally* from PushShift API *within 3 months* of that community's bot implementation
+- `{communityname}_clean_comments.csv` and `{communityname}_clean_comments.csv`: Comments and submissions with *removed* deleted/removed/bots' entries *within 1 month* of that community's bot implementation.
+- `{communityname}_{methods: base/unb}_pre_res.csv` and `{communityname}_{methods: base/unb}_post_res.csv`: Comments with *scores* within *1 month* of bot implementation. If the files are in the the community's folder, bot implementation is that community's bot implementation. If the files are in the control folders, they are used as control group.
 
 # Female Dating Strategy Toxicity
 
@@ -184,5 +188,9 @@ The problem with control group is that it could also be neighbor. So I explore t
 - Run with baseline model with current control groups and other posible control groups.
 - Find examples to see how toxicity varies.
 - Standardize outcome variables
+
+*Lower priorities*
 - Submissions: analyze toxicity in title, body. Memes: Facebook Dataset.
+- Deleted data: recover
+- Persepec
 
