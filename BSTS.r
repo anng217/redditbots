@@ -24,6 +24,7 @@ library(CausalImpact)
 setwd("E:/github/redditbots")
 getwd()
 
+# Function ----
 ## Function: Take subscriber info
 subscriber_num <- function(source_dir, from_date, to_date) {
   df <- read_csv(source_dir)
@@ -76,8 +77,10 @@ cross_users <- function(source_dir1, df1_name, source_dir2, df2_name) {
   return(df)
 }
 
-# Data Cleaning
+# Data Cleaning ----
 fds_df <- clean("E:/github/redditbots/data/fds/fds_res.csv")
+wgtow <- clean("E:/github/redditbots/data/wgotw/wgtow_res.csv")
+
 fm_df <- clean("E:/github/redditbots/data/control-fds/feminism_res.csv")
 twoX_df <- clean("E:/github/redditbots/data/control-fds/twoX_res.csv")
 wvsp_df <- clean("E:/github/redditbots/data/control-fds/wvsp_res.csv")
@@ -86,7 +89,7 @@ trollX_df <- clean("E:/github/redditbots/data/control-fds/trollX_res.csv")
 mgtow_df <- clean("E:/github/redditbots/data/control-fds/MGTOW_res.csv")
 trp_df <- clean("E:/github/redditbots/data/control-fds/TheRedPill_res.csv")
 
-# Take subscribers
+# Take subscribers ----
 fds_subsc <- subscriber_num(
   source_dir = "E:/github/redditbots/data/fds/fds_subm.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
@@ -118,17 +121,19 @@ trp_subsc <- subscriber_num(
 )
 
 mgtow_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/MGTOW_subsc.csv",
+  source_dir = "E:/github/redditbots/data/control-fds/mgtow_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 
-# Set pre-post periof
+# Set pre-post period ----
 pre_period <- c(1, 30)
 post_period <- c(31, 61)
 
-# fds ~ fm + twoX + trollX
-# identity attack: fds ~ fm + twoX
+#_______________________________ ---------
+# FDS AS FOCAL COMMUNITY ----
+## fds ~ fm + twoX + trollX ----
+### * identity attack: fds ~ fm + twoX + trollX ----
 identity_attack_m <- cbind(
   fds_df["identity_attack"], 
   fm_df["identity_attack"], fm_subsc["subscriber"],
@@ -144,7 +149,7 @@ identity_attack_m_impact <- CausalImpact(identity_attack_m, pre_period, post_per
 plot(identity_attack_m_impact)
 summary(identity_attack_m_impact)
 
-# insult: fds ~ fm + twoX
+### * insult: fds ~ fm + twoX + trollX ----
 insult_m <- cbind(
   fds_df["insult"],
   fm_df["insult"], fm_subsc["subscriber"],
@@ -160,7 +165,7 @@ insult_m_impact <- CausalImpact(insult_m, pre_period, post_period, model.args = 
 plot(insult_m_impact)
 summary(insult_m_impact)
 
-# toxicity
+### * toxicity: fds ~ fm + twoX + trollX ----
 toxicity_m <- cbind(
   fds_df["toxicity"],
   fm_df["toxicity"], fm_subsc["subscriber"],
@@ -179,7 +184,7 @@ toxicity_m_impact <- CausalImpact(toxicity_m, pre_period,
 plot(toxicity_m_impact)
 summary(toxicity_m_impact)
 
-# severe_toxicity
+### * severe_toxicity: fds ~ fm + twoX + trollX ----
 stoxicity_m <- cbind(
   fds_df["severe_toxicity"],
   fm_df["severe_toxicity"], fm_subsc["subscriber"],
@@ -199,7 +204,7 @@ stoxicity_m_impact <- CausalImpact(stoxicity_m, pre_period,
 plot(stoxicity_m_impact)
 summary(stoxicity_m_impact)
 
-# obscenity: 
+### * obscenity: : fds ~ fm + twoX ----
 obscene_m <- cbind(
   fds_df["obscene"], fds_subsc["subscriber"],
   fm_df["obscene"], fm_subsc["subscriber"],
@@ -219,16 +224,14 @@ obscene_m_impact <- CausalImpact(obscene_m, pre_period,
 plot(obscene_m_impact)
 summary(obscene_m_impact)
 
-# subscriber: 
+### * subscriber: fds ~ fm + twoX + trollX ----
 df.sub <- cbind(log(fds_subsc["subscriber"]),
   log(fm_subsc["subscriber"]),
   log(twoX_subsc["subscriber"]),
   log(trollX_subsc["subscriber"])
 )
 
-names(df.sub) <- c(
-  "Y", "sub", "sub2","sub3"
-)
+names(df.sub) <- c("Y", "sub", "sub2","sub3")
 
 mod.sub <- CausalImpact(df.sub, pre_period,
   post_period,
@@ -237,26 +240,11 @@ mod.sub <- CausalImpact(df.sub, pre_period,
 
 plot(mod.sub)
 
-#fds ~ trp + mgtow
+# _ _ _ _----
+## fds ~ trp + mgtow + twoX + trollX ----
+### * identity attack ----
 identity_attack_m <- cbind(
-  fds_df["identity_attack"], fds_subsc["subscriber"],
-  twoX_df["identity_attack"], twoX_subsc["subscriber"],
-  fm_df["identity_attack"], fm_subsc["subscriber"],
-  trollX_df["identity_attack"], trollX_subsc["subscriber"],
-  trp_df["identity_attack"], trp_subsc["subscriber"],
-  mgtow_df["identity_attack"], mgtow_subsc["subscriber"])
-
-names(identity_attack_m) <- c("Y", "fds_subsc ","twoX", "twoX_subsc","fm_ia", "fm_subsc", 
-                      "trollX_ia", "troll_subsc", "trp", "trp_subsc", "mgtow_ia", 
-                              "mgtow_subsc") #, "trollX_ia", "troll_subsc")
-
-identity_attack_m_impact <- CausalImpact(identity_attack_m, pre_period, post_period,model.args = list(niter = 5000, nseasons = 7))
-
-plot(identity_attack_m_impact)
-
-#subscribe
-identity_attack_m <- cbind(
-  fds_df["identity_attack"], 
+  fds_df["identity_attack"],
   twoX_df["identity_attack"], twoX_subsc["subscriber"],
   fm_df["identity_attack"], fm_subsc["subscriber"],
   trollX_df["identity_attack"], trollX_subsc["subscriber"],
@@ -264,9 +252,84 @@ identity_attack_m <- cbind(
   mgtow_df["identity_attack"], mgtow_subsc["subscriber"])
 
 names(identity_attack_m) <- c("Y", "twoX", "twoX_subsc","fm_ia", "fm_subsc", 
+                      "trollX_ia", "troll_subsc", "trp", "trp_subsc", "mgtow_ia", 
+                              "mgtow_subsc") #, "trollX_ia", "troll_subsc")
+
+identity_attack_m_impact <- CausalImpact(identity_attack_m, pre_period, post_period,model.args = list(niter = 10000, nseasons = 7))
+
+plot(identity_attack_m_impact)
+summary(identity_attack_m_impact)
+
+### * insult ----
+insult_m <- cbind(
+  fds_df["insult"],
+  twoX_df["insult"], twoX_subsc["subscriber"],
+  fm_df["insult"], fm_subsc["subscriber"],
+  trollX_df["insult"], trollX_subsc["subscriber"],
+  trp_df["insult"], trp_subsc["subscriber"],
+  mgtow_df["insult"], mgtow_subsc["subscriber"])
+
+names(insult_m) <- c("Y", "twoX", "twoX_subsc","fm_ia", "fm_subsc", 
                               "trollX_ia", "troll_subsc", "trp", "trp_subsc", "mgtow_ia", 
                               "mgtow_subsc") #, "trollX_ia", "troll_subsc")
 
-identity_attack_m_impact <- CausalImpact(identity_attack_m, pre_period, post_period,model.args = list(niter = 5000, nseasons = 7))
+insult_m_impact <- CausalImpact(insult_m, pre_period, post_period,model.args = list(niter = 10000, nseasons = 7))
 
-plot(identity_attack_m_impact)
+plot(insult_m_impact)
+summary(insult_m_impact)
+
+# ________________________________ ---- 
+# WGTOW AS FOCAL COMMUNITY (too complicated. Later) ----
+## Data Cleaning ----
+wgtow_df <- clean("E:/github/redditbots/data/wgtow/wgtow_res.csv")
+
+## Take Subscribers ----
+wgtow_subsc <- subscriber_num(
+  source_dir = "E:/github/redditbots/data/wgtow/wgtow_clean_subm.csv",
+  from_date = "2021-03-30", to_date = "2021-05-29"
+)
+
+## _ _ _ _ ----
+## wgtow ~ fm + twoX + trollX ----
+### * subscriber: wgtow ~ fm + twoX + trollX ----
+
+
+# ________________________________ ---- 
+# WVSP AS FOCAL COMMUNITY (also missing submission date)----
+## Data Cleaning ----
+wvsp_df <- clean("E:/github/redditbots/data/witchesvspatriarchy/wvsp_res.csv")
+
+## Take Subscribers ----
+wvsp_subsc <- subscriber_num(
+  source_dir = "E:/github/redditbots/data/witchesvspatriarchy/wvsp_clean_subm.csv",
+  from_date = "2020-11-22", to_date = "2021-01-21"
+)
+
+## wgtow ~ fm + twoX + trollX ----
+### * subscriber: wgtow ~ fm + twoX + trollX ----
+
+
+library(rdd)
+library(fixest)
+
+
+
+df <- read.csv("E:/github/redditbots/data/fds/fds_res.csv")
+
+df$date <-  as.Date(df$created_utc, "%Y-%m-%d")
+
+df$post_tt <- ifelse(df$Rel_Date < 0, 0, 1)
+
+df$relative_day <- difftime(df$date,as.Date('2019-10-28', "%Y-%m-%d"), units = "days")
+
+df$post_tt <- ifelse(df$relative_day < 0, 0, 1)
+
+df$relative_day <- as.numeric(df$relative_day)
+
+
+bw <- with(df, IKbandwidth(relative_day, toxicity, cutpoint = -0.5))
+
+rdd_simple <- RDestimate(toxicity ~ relative_day, data = df, cutpoint = 0)
+
+rdd_simple
+

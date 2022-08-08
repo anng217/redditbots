@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+import scipy.stats as sts
+
 def detox_loop(df,model):
     detox = Detoxify(model, device='cuda')
     i = 0
