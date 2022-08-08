@@ -11,7 +11,7 @@
 - Process *intended*:
     - Retrieve all deleted comments/posts 
     - Retrieve reactions for current comments/posts
-----
+
 ## 2. Cleaning
 - File: `datacleaning.ipynb`
 - Input: ..\data[focal_subr_name]\ `[subr_name]_comments.csv`
@@ -23,7 +23,7 @@
         + Comments: 
         + Posts: 
     4. Report number of cases before, after, cleaned, left out.
-----
+
 ## 3. Harassment Detection
 - File: `perspectiveapi.ipynb`
 - Input: NA
@@ -36,7 +36,7 @@
 - Process:
     1. Get scores for each comments with detoxify model 
     2. Flag if the comment is harassment based on threshhold
-----
+
 ## 4. Regression
 - File: `visual_RD.r`
 - Input: TBD
