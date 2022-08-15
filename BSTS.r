@@ -21,7 +21,7 @@ library(lubridate)
 library(CausalImpact)
 
 # Working directory
-setwd("E:/github/redditbots")
+setwd("E:/github-data/redditbots")
 getwd()
 
 # Function ----
@@ -78,10 +78,10 @@ cross_users <- function(source_dir1, df1_name, source_dir2, df2_name) {
 }
 
 # Data Cleaning ----
-fds_df <- clean("E:/github/redditbots/data/fds/fds_res.csv")
+fds_df <- clean("E:/gihub-data/redditbots/fds/fds_res.csv")
 wgtow <- clean("E:/github/redditbots/data/wgotw/wgtow_res.csv")
 
-fm_df <- clean("E:/github/redditbots/data/control-fds/feminism_res.csv")
+fm_df <- clean("E:/github-data/redditbots/data/control-fds/feminism_res.csv")
 twoX_df <- clean("E:/github/redditbots/data/control-fds/twoX_res.csv")
 wvsp_df <- clean("E:/github/redditbots/data/control-fds/wvsp_res.csv")
 trollX_df <- clean("E:/github/redditbots/data/control-fds/trollX_res.csv")
@@ -89,42 +89,49 @@ trollX_df <- clean("E:/github/redditbots/data/control-fds/trollX_res.csv")
 mgtow_df <- clean("E:/github/redditbots/data/control-fds/MGTOW_res.csv")
 trp_df <- clean("E:/github/redditbots/data/control-fds/TheRedPill_res.csv")
 
+fds_bsts <- clean("E:/gihub-data/redditbots/fds/fds_res.csv")
+fm_bsts <- clean("E:/gihub-data/redditbots/control-fds/feminism_res.csv")
+twoX_bsts <- clean("E:/gihub-data/redditbots/control-fds/twoX_res.csv")
+wvsp_bsts <- clean("E:/gihub-data/redditbots/control-fds/wvsp_res.csv")
+trollX_bsts <- clean("E:/gihub-data/redditbots/control-fds/trollX_res.csv")
+mgtow_bsts <- clean("E:/gihub-data/redditbots/control-fds/mgtow_res.csv")
+trp_bsts <- clean("E:/gihub-data/redditbots/control-fds/TheRedPill_res.csv")
+
 # Take subscribers ----
 fds_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/fds/fds_subm.csv",
+  source_dir = "E:/gihub-data/redditbots/fds/fds_clean_subm.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 fm_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/feminism_subsc.csv",
+  source_dir = "E:/gihub-data/redditbots/control-fds/feminism_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 twoX_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/twoX_subsc.csv",
+  source_dir = "E:/gihub-data/redditbots/control-fds/twoX_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 wvsp_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/wvsp_subsc.csv",
+  source_dir = "E:/gihub-data/redditbots/control-fds/wvsp_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 trollX_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/TrollX_subsc.csv",
+  source_dir = "E:/gihub-data/redditbots/control-fds/trollX_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 trp_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/trp_subsc.csv",
+  source_dir = "E:/gihub-data/redditbots/control-fds/trp_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
 
 mgtow_subsc <- subscriber_num(
-  source_dir = "E:/github/redditbots/data/control-fds/mgtow_subsc.csv",
+  source_dir = "E:/gihub-data/redditbots/control-fds/mgtow_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27"
 )
-
 
 # Set pre-post period ----
 pre_period <- c(1, 30)

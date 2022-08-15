@@ -1,0 +1,41 @@
+---
+title: "Mitigating Harassment in Online Communities with Human-Bot Moderation: Insights from Reddit Communities"
+format: 
+  docx:
+    reference-doc: custom-reference-doc.docx
+author:
+  - An Nguyen^[Georgia State University, anguyen192@gsu.edu]
+  - Arun Rai^[Georgia State University, arunrai@gsu.edu]
+  - Likoebe Maruping^[Georgia State University, lmaruping@gsu.edu]
+csl: apa.csl
+abstract: abstract
+editor: visual
+---
+
+# Introduction
+
+```{r, echo = F, results = F}
+.libPaths()
+.libPaths(.libPaths()[2])
+setwd("E:/github/redditbots/paper")
+getwd()
+```
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).

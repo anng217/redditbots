@@ -59,9 +59,13 @@
 - Non-text submissions
 - Clean internet characters
 
-## Reddit REST API
+## Reddit REST API: [My Apps](https://www.reddit.com/prefs/apps) | [Endpoints](https://www.reddit.com/dev/api/oauth)
 
-
+- App name: lang_research
+- abou url: https://github.com/anng217
+- redirect uri: https://github.com/anng217 
+- key: B4zgdtXspxBb0Gj3CFiDYQ
+- secret	9xuueIhFmNnf2DhSf8I_Ggn0AO6psA
 
 ## Perspective API : [Sample Request](https://developers.perspectiveapi.com/s/docs-sample-requests) | [Installation Guide](https://github.com/googleapis/google-api-python-client) |
 ### Code
