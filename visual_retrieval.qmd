@@ -1,0 +1,244 @@
+---
+title: "Descriptive Stats"
+format: revealjs
+editor: visual
+bibliography: bot-moderation.bib
+---
+
+# Descriptive Statistics - Upvotes
+
+```{r routine-load-clean, echo = F, results = F}
+rm(list = ls())
+
+.libPaths()
+.libPaths(.libPaths()[2])
+setwd("E:/github/redditbots")
+getwd()
+
+library(data.table)
+library(dplyr)
+library(tidyverse)
+library(jsonlite)
+library(lubridate)
+library(ggplot2)
+library(stringr)
+library(kableExtra)
+library(rddtools)
+library(magrittr)
+
+fds_retrv <- read_csv("E:/gihub-data/redditbots/fds/fds_comment_retrieved.csv")
+
+fds_short <-  fds_retrv %>%
+  select(total_awards_received, approved_at_utc, edited, banned_by,
+         removal_reason, link_id, replies, id, banned_at_utc,
+         gilded, author, created_utc, parent_id, score, mod_note, all_awardings,
+         subreddit_id, subreddit, body, awarders, name, downs, associated_award,
+         stickied, can_gild, top_awarded_type, permalink, num_reports, 
+         report_reasons, created, treatment_tags, controversiality, mod_reports,
+         ups, downs, author_fullname)
+
+
+fds_short <-  fds_short %>%
+  mutate(created_date = date(as_datetime(created_utc)))
+```
+
+```{r ups-by-day, echo = F}
+fds_short %>% group_by(created_date) %>%
+  summarise(mean_up = mean(ups)) %>%
+  ggplot(., aes(x=created_date, y=mean_up)) +
+  geom_line()+
+  geom_vline(xintercept = as.Date("2019-10-28", "%Y-%m-%d"),
+             color = "red",
+             size = 1, linetype = "dashed")+
+  theme_minimal()+
+  scale_color_brewer(palette = "Accent")+
+  guides(color = FALSE) +
+  labs(y = "Comment Score",
+       x = "Date",
+       title ='Comment Score in Six Months Period') + 
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"))
+```
+
+# Descriptive statistics - Controversiality (1) {.smaller}
+
+-   Controversiality: "The identification of controversial content is determined by the Reddit's formula for controversial comments, the final labeling for which is provided through the Reddit API. According to Reddit/'s definition, a comment is controversial if 1) the sum of up- and down-votes is greater than or equal to 7, and 2) the ratio of up- and down-votes lies between selected upper (ub = 0.6) and lower bounds (lb = 0.4) as shown in equation (1). We found the algorithm responsible for identifying controversial comments in the reddit-archive repository in GitHubFootnote3.".[Jasser et al. 2022]
+-   Source: Reddit API
+
+# Descriptive statistics - Controversality (2) {.smaller}
+```{r controversiality, echo = FALSE, results = FALSE}
+fds_short %>% group_by(created_date) %>%
+  mutate(rel_time.d = as.numeric(difftime(created_date, as_datetime(1572234835), units = "days"))) %>%
+  filter(rel_time.d <=15 & rel_time.d >= -15) %>%
+  summarise(mean_contro = mean(controversiality)) %>%
+  ggplot(., aes(x=created_date, y=mean_contro)) +
+  geom_point()+
+  geom_vline(xintercept = as.Date("2019-10-28", "%Y-%m-%d"),
+             color = "red",
+             size = 1, linetype = "dashed")+
+  theme_minimal()+
+  scale_color_brewer(palette = "Accent")+
+  labs(y = "Controversiality",
+       x = "Date",
+       title ='Controversiality in 31-day Period') + 
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"))
+```
+
+# Compare with Pushshift.io {.smaller}
+```{r pushift-data-load, echo = F, results = F}
+fds_push_full <- read_csv("E:/gihub-data/redditbots/fds/fds_comments.csv")
+```
+```{r clean-pushift-data, echo = F, results = F}
+fds_pushs <- fds_push_full %>%
+  select(author, body, id, link_id, permalink)
+fds_pushs <- fds_pushs %>%
+  rename(author.push = author, body.push = body, id.push = id,
+         link_id.push = link_id, permalink.push = permalink)
+
+# num deleted
+fds_pushs %>% filter(body.push == "[deleted]") #809
+fds_pushs %>% filter(body.push == "[removed]") #20,390
+fds_short %>% filter(body == "[deleted]" | body == "[removed]")
+
+# join the two data
+fds_compr <- left_join(fds_pushs, fds_short, by = c("id.push" = "id"), prefix = c(".x",".y"))
+
+# (1) both deleted = 809
+fds_compr %>% filter(body.push == "[deleted]", body == "[deleted]")
+# (2) both removed = 11,406
+fds_compr %>% filter(body.push == "[removed]", body == "[removed]")
+
+# (3) push not deleted, but reddit is deleted = 19,552
+fds_compr %>% filter(body.push != "[deleted]", body == "[deleted]")
+# (4) push is deleted, but reddit is not deleted = 0
+fds_compr %>% filter(body.push == "[deleted]", body != "[deleted]")
+
+# (5) push is not removed but reddit is removed = 6,324
+fds_compr %>% filter(body.push != "[removed]", body == "[removed]")
+# (6) push is removed but reddit is not removed = 8,984
+fds_compr %>% filter(body.push == "[removed]", body != "[removed]") # take this 
+
+removed_comments.id <- fds_compr %>% 
+  filter(body.push == "[removed]", body != "[removed]") %>%
+  select(id.push)
+
+fds_suppl <- left_join(removed_comments.id,fds_retrv, by = c("id.push"="id")) 
+
+fds_suppl <- fds_suppl %>%
+  select(id.push, body, author, created_utc, permalink, parent_id,
+         subreddit, score, controversiality) %>%
+  mutate(post = ifelse(created_utc > 1572234835, 1, 0))
+```
+| Pushift - Reddit API | Num    |
+|----------------------|--------|
+| Cannot recover       | 12,215 |
+| Deleted N-Y          | 19,552 |
+| Deleted Y-N          | 0      |
+| Removed N-Y          | 6,324  |
+| Removed Y-N          | 8,984  |
+| Y - N/A              | 21,199 |
+| N/A - Y              | 38,091 |
+
+```{r connect-clean-score-like, echo = F, results = T}
+## Connect Reddit API and cleaned data from Pushift
+fds_score <- read_csv("E:/gihub-data/redditbots/fds/fds_res.csv")
+fds_short <- fds_short %>%
+  rename(permalink.api = permalink)
+fds_metrics_org <- left_join(fds_score, fds_short,
+                              by = c("permalink"  = "permalink.api"),
+                              suffix = c(".score", ".api"))
+fds_metrics_org <- fds_metrics_org %>%
+  select(created_utc.score, id, parent_id.api, score.score, post,
+         toxicity, severe_toxicity, obscene, threat, insult, identity_attack,
+         total_awards_received, gilded, awarders, name, controversiality, ups) %>%
+  mutate(created_utc.score = as.numeric(created_utc.score))#666 NAs, pushift has the data but api does not have it
+
+# Joining the second part
+fds_score_add <- read_csv("E:/gihub-data/redditbots/fds/fds_comment_res_add.csv")
+
+fds_metrics_add <- left_join(fds_score_add, fds_short,
+                                  by = c("id.push" = "id"),
+                                  suffix = c(".score", ".api"))
+
+fds_metrics_add <- fds_metrics_add %>%
+  select(created_utc.score, id.push, parent_id.api, score.score, post,
+         toxicity, severe_toxicity, obscene, threat, insult, identity_attack,
+         total_awards_received, gilded, awarders, name, 
+         controversiality.api, ups) %>%
+  rename(id = id.push, controversiality = controversiality.api) 
+
+# rbind the pushift and the additional
+fds_metrics <- rbind(fds_metrics_org, fds_metrics_add)
+```
+
+## Controversiality Correlation {.smaller}
+```{r rdd-controveriality, echo = F, results = T}
+kable(cor(fds_metrics %>% 
+      select(controversiality, ups, toxicity, insult, identity_attack, total_awards_received) %>%
+        na.omit())) %>%
+  kable_material("hover")
+```
+
+## Controversiality Discontinuity (0)
+```{r contro-rdd-same, echo = F, results = F}
+# cleaning 
+fds_metrics <- fds_metrics %>% 
+  na.omit()%>%
+  mutate(created_dt = as_datetime(created_utc.score),
+         rel_time.d = round(as.numeric(difftime(created_dt, as_datetime(1572234835), units = "days"))))
+
+lm_same_slope <- fds_metrics %>%
+  filter(rel_time.d <= 15 & rel_time.d >= -15) %>%
+  group_by(rel_time.d) %>%
+  mutate(threshold = ifelse(rel_time.d >= 0, 1, 0),
+         contro_m = mean(controversiality)) %$%
+  lm(contro_m ~ threshold + I(rel_time.d - 0))
+
+summary(lm_same_slope) 
+```
+
+## Controversiality Discontinuity (1)
+```{r, echo = F, results = T}
+lm_dif_slope <- fds_metrics %>%
+  filter(rel_time.d <= 15 & rel_time.d >= -15) %>%
+  group_by(rel_time.d) %>%
+  mutate(threshold = ifelse(rel_time.d >= 0, 1, 0),
+         contro_m = mean(controversiality)) %$%
+  lm(contro_m ~ threshold + I(rel_time.d - 0) + + threshold:I(rel_time.d - 0))
+
+summary(lm_dif_slope)
+```
+
+## Controversiality Discontinuity (2)
+```{r controv-rdd-visual, echo = F, results = T}
+fds_metrics %>% 
+  filter(rel_time.d <= 15 & rel_time.d >= -15) %>%
+  group_by(rel_time.d) %>%
+  summarise(contro_m = mean(controversiality)) %>%
+  mutate(threshold = as.factor(ifelse(rel_time.d >= 0, 1, 0))) %>%
+  ggplot(aes(x = rel_time.d, y = contro_m, color = threshold)) + 
+  geom_point() +
+  geom_smooth(method = 'lm',se = T)+
+  geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dashed") + 
+  labs(y = "Controversiality",
+       x = "Relative Time in Days") +
+  ggtitle("Controversiality in 31-day period")
+```
+
+## Strategies for H1 Controls and H3:{.smaller}
+
+Track users who posted toxic/identity attack/insults/controversial comments:
+
+- Which are other communities they posted on with similar topics/with similar interests.
+
+- Worst case: See if the person change their language in other subreddits.
+
+## Reference
+
+::: {#refs}
+:::

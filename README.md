@@ -61,11 +61,17 @@
 
 ## Reddit REST API: [My Apps](https://www.reddit.com/prefs/apps) | [Endpoints](https://www.reddit.com/dev/api/oauth)
 
-- App name: lang_research
-- abou url: https://github.com/anng217
-- redirect uri: https://github.com/anng217 
-- key: B4zgdtXspxBb0Gj3CFiDYQ
-- secret	9xuueIhFmNnf2DhSf8I_Ggn0AO6psA
+| App Name      | babi_research                  | mia_research                   |
+|---------------|--------------------------------|--------------------------------|
+| App Type      | Personal Use Script            | Web App                        |
+| Client Secret | 9xuueIhFmNnf2DhSf8I_Ggn0AO6psA | up4Pj6q6JD0T2hZ6Pjzwl_JCTu3jbA |
+| Key           | B4zgdtXspxBb0Gj3CFiDYQ         | F3DXdvllALqoFJ7KUfw7sg         |
+| About URL     | https://github.com/anng217     | https://github.com/anng217     |
+| Redirect URI  | http://localhost:8080          | http://localhost:8080          |
+
+## PRAW: [Newest documentation](https://praw.readthedocs.io/en/latest/index.html)
+!!!Caution!!!: Install the latest version and follow the latest documentation
+
 
 ## Perspective API : [Sample Request](https://developers.perspectiveapi.com/s/docs-sample-requests) | [Installation Guide](https://github.com/googleapis/google-api-python-client) |
 ### Code

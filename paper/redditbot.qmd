@@ -8,34 +8,57 @@ author:
   - Arun Rai^[Georgia State University, arunrai@gsu.edu]
   - Likoebe Maruping^[Georgia State University, lmaruping@gsu.edu]
 csl: apa.csl
-abstract: abstract
+abstract: This paper sets out to explore the duality of human-bot moderation in mitigating ha¬rassment. We examine communities that use a block-list type of bot to prevent harass¬ment from the source of harassment. We expect that the employment of the bot along¬side human moderation will create a shielding effect - a declining trend of harassment towards community members, followed by an emboldening effect - an uptick in ha¬rassment by community members towards their perceived outgroup members, and, finally, a spillover effect - an increase in harassment in neighbor communities who share the same topic of discussion but not the same moderators. We use Detoxify, a BERT-based model, to determine the probability that a comment represents harassment. . We then use Bayesian Structure Time Series to examine the three types of effects of human-bot moderation in the communities under study
 editor: visual
 ---
 
 # Introduction
 
-```{r, echo = F, results = F}
-.libPaths()
-.libPaths(.libPaths()[2])
-setwd("E:/github/redditbots/paper")
-getwd()
-```
+The need to converse emerged since the dawn of human civilization. In this Internet age, that need for face-to-face conversation has evolved into the need for online conversation, which ranges from decade-old Internet Relay Chat and forums to today’s newsgroup and social networks. Not all conversations are civilized conversations. In online settings, be-cause of online anonymity, people may engage in even more harmful activities (Duggan, 2021), such as harassment and cyberbullying. In a recent survey by Pew Research (Vo-gels, 2021), 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. Policymakers realized the Internet’s side effects; thus, several measurements have been implemented. Forty-eight states include cyberbullying and online harassment in their bullying laws for K-12 education, out of which forty-four states impose criminal sanctions on such actions (“Bullying Laws Across America.”, 2021). At the platform levels, platform owners also actively take action against online toxicity in response to such phenomenon. 
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
-## Running Code
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+# Theoretical Background
 
-```{r}
-1 + 1
-```
+## Toxicity and Harassmnet
 
-You can add options to executable code like this
+## Social Catergorization Lense
 
-```{r}
-#| echo: false
-2 * 2
-```
+### Source, Target, and Acts of Harassment
 
-The `echo: false` option disables the printing of code (only output is displayed).
+### Focal Community and Neighbor Community
+
+## Human Machine Moderation
+
+### Human-out-of-the-loop versus Human-in-the-loop Moderation
+
+### AI-based Moderation
+
+### Rule-based Moderation
+
+### Moderation Strategy
+
+## Hypotheses
+
+### Shielding Effects of Human-bot Moderation
+
+### Emboldening Effects of Human-bot Moderation
+
+### Spillover Effects of Human-bot Moderation
+
+## Empirical Analysis
+
+### Context
+
+#### Reddit and its moderation policies
+
+#### The bot, *r/saferbot* and the community, *r/femaledatingstrategy*
+
+#### Data Collection, Measurement, and Research Design
+
+### Analysis
+
+## Discussion and Future Research
+
+::: {#refs}
+:::

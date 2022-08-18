@@ -8,7 +8,7 @@ With respect to detoxify.ipynb
 
 | No. | Community              | Type        | Before (Orig.) | Before (Clean)              | After (Orig.) | After (Clean)              | Bot Date      |
 |-----|------------------------|-------------|----------------|-----------------------------|---------------|----------------------------|---------------|
-| 1   | r/femaledatingstrategy | Comments    | 16,028         | 13,485                      | 31,357        | 23,149                     | Oct 28, 2019  |
+| 1   | r/femaledatingstrategy | Comments    | 16,028         | 13,485                      | 31,357        | 23,149                     | Oct 28, 2019<br>1572234835  |
 |     |                        | Submissions | 894            | 432 (Text)<br>159(Images)   | 1901          | 596 (Text)<br>432 (Images) |               |
 | 2   | r/women                | Comments    | 271            | 214                         | 201           | 154                        | June 27, 2016 |
 |     |                        | Submissions | 550            | 15 (Text)<br>11 (Images)    | 682           | 11 (Text)<br>7 (Images)    |               |

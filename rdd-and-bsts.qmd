@@ -370,6 +370,7 @@ library(synthdid)
 ```
 
 ## Synthetic Control DiD (1)
+
 ```{r clean-data-for-BSTS-and-gsynth, echo = F, results = F, warning = FALSE}
 # Load and clean
 fds_bsts <- agg_data("E:/gihub-data/redditbots/fds/fds_res.csv",
@@ -499,6 +500,7 @@ summary(mod)
 ```
 
 ## Synthetic Control DiD {.smaller}
+
 ```{r plotting-synthetic-did, echo = F, results = F}
 plot(mod, se.method='placebo')
 ```
