@@ -61,7 +61,6 @@ fds_short %>% group_by(created_date) %>%
         panel.background = element_blank(),
         axis.line = element_line(colour = "black"))
 ```
-
 # Descriptive statistics - Controversiality (1) {.smaller}
 
 -   Controversiality: "The identification of controversial content is determined by the Reddit's formula for controversial comments, the final labeling for which is provided through the Reddit API. According to Reddit/'s definition, a comment is controversial if 1) the sum of up- and down-votes is greater than or equal to 7, and 2) the ratio of up- and down-votes lies between selected upper (ub = 0.6) and lower bounds (lb = 0.4) as shown in equation (1). We found the algorithm responsible for identifying controversial comments in the reddit-archive repository in GitHubFootnote3.".[Jasser et al. 2022]
@@ -209,7 +208,7 @@ lm_dif_slope <- fds_metrics %>%
   group_by(rel_time.d) %>%
   mutate(threshold = ifelse(rel_time.d >= 0, 1, 0),
          contro_m = mean(controversiality)) %$%
-  lm(contro_m ~ threshold + I(rel_time.d - 0) + + threshold:I(rel_time.d - 0))
+  lm(contro_m ~ threshold + rel_time.d + threshold:rel_time.d)
 
 summary(lm_dif_slope)
 ```
@@ -217,12 +216,10 @@ summary(lm_dif_slope)
 ## Controversiality Discontinuity (2)
 ```{r controv-rdd-visual, echo = F, results = T}
 fds_metrics %>% 
-  filter(rel_time.d <= 15 & rel_time.d >= -15) %>%
-  group_by(rel_time.d) %>%
-  summarise(contro_m = mean(controversiality)) %>%
-  mutate(threshold = as.factor(ifelse(rel_time.d >= 0, 1, 0))) %>%
-  ggplot(aes(x = rel_time.d, y = contro_m, color = threshold)) + 
-  geom_point() +
+  filter(rel_time.d <= 1 & rel_time.d >= -1) %>%
+  mutate(rel_time.m = round(as.numeric(difftime(created_dt, as_datetime(1572234835), units = "mins")))) %>%
+  mutate(threshold = as.factor(ifelse(rel_time.m >= 0, 1, 0))) %>%
+  ggplot(aes(x = rel_time.m, y = controversiality, color = threshold)) + 
   geom_smooth(method = 'lm',se = T)+
   geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dashed") + 
   labs(y = "Controversiality",

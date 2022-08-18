@@ -33,67 +33,10 @@ library(psych)
 #fds <- read.csv("E:/gihub-data/redditbots/fds/fds_res.csv")
 ```
 
-```{r function, echo = F, results = T}
-# Function ----
-## Function: Take subscriber info
-subscriber_num <- function(source_dir, from_date, to_date) {
-  df <- read_csv(source_dir)
-  df <- df %>%
-    dplyr::select(created_utc, subreddit_subscribers) %>%
-    mutate(created_date = as_date(lubridate::as_datetime(created_utc))) %>%
-    group_by(created_date) %>%
-    summarise(max = max(subreddit_subscribers)) %>%
-    filter(created_date >= as.Date(from_date) & created_date <= as.Date(to_date))
-  # from = "2019-09-28", to = "2019-11-27"
-  names(df)[2] <- "subscriber"
-  return(df)
-}
-
-## Function: Clean data for BSTS
-agg_data <- function(source_dir, toxic_thresh, insult_thresh, ia_thresh) {
-  df <- read_csv(source_dir)
-  df <- df %>%
-    mutate(created_date = as_date(lubridate::as_datetime(created_utc)),
-           toxicity_f = ifelse(toxicity > toxic_thresh,1,0),
-           identity_attack_f = ifelse(identity_attack > ia_thresh,1,0),
-           insult_f = ifelse(insult > insult_thresh, 1, 0)) %>%
-    group_by(created_date) %>%
-    summarise(
-      toxicity = mean(toxicity),
-      severe_toxicity = mean(severe_toxicity),
-      obscene = mean(obscene),
-      identity_attack = mean(identity_attack),
-      insult = mean(insult), threat = mean(threat),
-      # sexual_explicit_m = mean(sexual_explicit),
-      toxicity_p = mean(toxicity_flag),
-      severe_toxicity_p = mean(severe_toxicity_flag),
-      obscene_p = mean(obscene_flag),
-      identity_attack_p = mean(identity_attack_f),
-      insult_p = mean(insult_f),
-      # exual_explicit_p = mean(sexual_explicit_flag),
-      threat_p = mean(threat_flag)
-    )
-  return(df)
-}
-
-add_relDate <- function(df, day_zero) {
-  df$relative_day <- difftime(df$created_date, as.Date(day_zero, "%Y-%m-%d"), units = "days")
-  df$post <- ifelse(df$relative_day <0, 0, 1)
-  df$relative_day <- as.numeric(df$relative_day)
-  return(df)
-}
-
-adjust_thresh <-  function (df, toxic_thresh = 0.5, s.toxic_thresh = 0.5,
-                            obscene_thresh = 0.5, threat_thresh = 0.5, 
-                            insult_thresh = 0.5, ia_thresh = 0.5) {
-  df <- df %>%
-    mutate_if(toxicity_f = ifelse(toxicity > toxic_thresh,1,0),
-           s.toxity_f = ifelse(toxicity > toxic_thresh,1,0),
-           identity_attack_f = ifelse(identity_attack > ia_thresh,1,0),
-           insult_f = ifelse(insult > insult_thresh, 1, 0))
-  return(df)
-}
+```{r import function, echo = F, output = F}
+source("redditbots_function.R")
 ```
+
 
 ```{r cleaning, echo = FALSE, output = FALSE}
 fds <- read.csv("E:/gihub-data/redditbots/fds/fds_res.csv")
@@ -103,6 +46,8 @@ fds <-fds %>%
 
 fds <- add_relDate(fds, day_zero = "2019-10-28")
 ```
+
+
 
 ```{r descriptive-by-date, echo = FALSE, results = FALSE}
 as.data.frame(
@@ -370,7 +315,6 @@ library(synthdid)
 ```
 
 ## Synthetic Control DiD (1)
-
 ```{r clean-data-for-BSTS-and-gsynth, echo = F, results = F, warning = FALSE}
 # Load and clean
 fds_bsts <- agg_data("E:/gihub-data/redditbots/fds/fds_res.csv",
@@ -500,7 +444,6 @@ summary(mod)
 ```
 
 ## Synthetic Control DiD {.smaller}
-
 ```{r plotting-synthetic-did, echo = F, results = F}
 plot(mod, se.method='placebo')
 ```

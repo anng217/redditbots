@@ -505,19 +505,18 @@
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = contro_m ~ threshold + I(rel_time.d - 0) + +threshold:I(rel_time.d - 
-    0))
+lm(formula = contro_m ~ threshold + rel_time.d + threshold:rel_time.d)
 
 Residuals:
        Min         1Q     Median         3Q        Max 
 -0.0170108 -0.0057040 -0.0003011  0.0042711  0.0273570 
 
 Coefficients:
-                              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)                  3.567e-02  1.353e-04  263.56   &lt;2e-16 ***
-threshold                   -2.134e-02  1.847e-04 -115.56   &lt;2e-16 ***
-I(rel_time.d - 0)            1.299e-03  1.882e-05   69.03   &lt;2e-16 ***
-threshold:I(rel_time.d - 0) -1.137e-03  2.348e-05  -48.42   &lt;2e-16 ***
+                       Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           3.567e-02  1.353e-04  263.56   &lt;2e-16 ***
+threshold            -2.134e-02  1.847e-04 -115.56   &lt;2e-16 ***
+rel_time.d            1.299e-03  1.882e-05   69.03   &lt;2e-16 ***
+threshold:rel_time.d -1.137e-03  2.348e-05  -48.42   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
