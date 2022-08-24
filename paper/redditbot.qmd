@@ -10,13 +10,18 @@ author:
 csl: apa.csl
 abstract: This paper sets out to explore the duality of human-bot moderation in mitigating ha¬rassment. We examine communities that use a block-list type of bot to prevent harass¬ment from the source of harassment. We expect that the employment of the bot along¬side human moderation will create a shielding effect - a declining trend of harassment towards community members, followed by an emboldening effect - an uptick in ha¬rassment by community members towards their perceived outgroup members, and, finally, a spillover effect - an increase in harassment in neighbor communities who share the same topic of discussion but not the same moderators. We use Detoxify, a BERT-based model, to determine the probability that a comment represents harassment. . We then use Bayesian Structure Time Series to examine the three types of effects of human-bot moderation in the communities under study
 editor: visual
+bibliography: [E:/github/redditbots/paper/bot-moderation.bib]
 ---
 
 # Introduction
 
-The need to converse emerged since the dawn of human civilization. In this Internet age, that need for face-to-face conversation has evolved into the need for online conversation, which ranges from decade-old Internet Relay Chat and forums to today’s newsgroup and social networks. Not all conversations are civilized conversations. In online settings, be-cause of online anonymity, people may engage in even more harmful activities (Duggan, 2021), such as harassment and cyberbullying. In a recent survey by Pew Research (Vo-gels, 2021), 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. Policymakers realized the Internet’s side effects; thus, several measurements have been implemented. Forty-eight states include cyberbullying and online harassment in their bullying laws for K-12 education, out of which forty-four states impose criminal sanctions on such actions (“Bullying Laws Across America.”, 2021). At the platform levels, platform owners also actively take action against online toxicity in response to such phenomenon. 
+The need to converse emerged since the dawn of human civilization. In this Internet age, that need for face-to-face conversation has evolved into the need for online conversation, which ranges from decade-old Internet Relay Chat and forums to today’s newsgroup and social networks. Not all conversations are civilized conversations. In online settings, because of online anonymity, people may engage in even more harmful activities [@pewanonymity], such as harassment and cyberbullying. Harassment does not only negatively affects 
+In a recent survey by Pew Research [@pewstateofharassment] , 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. Policymakers realized the Internet’s side effects; thus, several measurements have been implemented. Forty-eight states include cyberbullying and online harassment in their bullying laws for K-12 education, out of which forty-four states impose criminal sanctions on such actions [@cyberbullyingresearchcenter]. At the platform levels, platform owners also actively take action against online toxicity in response to such phenomenon. 
 
-
+<mark>Marked text</mark>
+⦁	Harassment is bad for the targets of the activity; unpleasant experience, affects mental well-being and feeling of safety;
+⦁	Harassment is bad for the health of the community; erodes quality of community discourse; genuine community members may leave; genuine contributors may say less; interested potential members may opt not to join.
+Consequently, addressing harassment is a major focus of online communities.
 
 # Theoretical Background
 

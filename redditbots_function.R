@@ -75,32 +75,44 @@ clean_comm.api <-  function(source_dir){
   return(df)
 }
 
-#not tested
-comm_push.api <- function(source_dir.push, source_dir.api, report = TRUE){
-  df.push <- read_csv(source_dir.push)
-  df.api <- read_csv(source_dir.api)
-  df.pushs <- df.push %>%
+within1month <- function(df, bot_epoch){
+  df <-  df %>%
+    mutate(created_date = as_datetime(created_utc )) %>%
+    filter(created_utc > as_datetime(bot_epoch) + ddays(30) &
+             created_utc <  as_datetime(bot_epoch) - ddays(30))
+  return(df)
+}
+
+join_push.api <- function(df.push, df.api, report = TRUE){
+  df.push <- df.push %>%
     dplyr::select(author, body, id, link_id, permalink) %>%
     rename(author.push = author, body.push = body, id.push = id,
            link_id.push = link_id, permalink.push = permalink)
-  df.api <- read_csv(source_dir.api)%>%
+  df.api <- df.api%>%
     dplyr::select(author, body, id, link_id, permalink)
-  df.compr <- left_join(df.push, df.api, by = c("id.push" = "id"), prefix = c(".x",".y"))
+  df.join <- left_join(df.push, df.api, by = c("id.push" = "id"), prefix = c(".x",".y"))
   if (report == TRUE){
-    x1 = length(df.compr %>% filter(body.push == "[deleted]", body == "[deleted]"))
-    print(paste("Both were deleted: ", x1))
-    x2 = length(df.compr %>% filter(body.push == "[removed]", body == "[removed]"))
-    print(paste("Both were removed", x2))
-    x3 = (length(df.compr %>% filter(body.push  != "[deleted]", body == "[removed]")))
-    print(paste("Deleted on Reddit after Pushift scraped", x3))
-    x4 = length(df.compr %>% filter(body.push == "[deleted]", body != "[deleted]"))
-    print(paste("Pushift deleted but recovered by now", x4))
-    x5 = length(df.compr %>% filter(body.push != "[removed]", body == "[removed]"))
-    print(paste("Removed on Reddit after Pushift scraped", x5))
-    x6 = length(df.compr %>% filter(body.push == "[removed]", body != "[removed]"))
-    print(paste("Pushift removed but recovered by now", x6))
+    x1 = nrow(df.join %>% filter(body.push == "[deleted]", body == "[deleted]"))
+    print(paste("Bot were deleted: ", x1))
+    x2 = nrow(df.join %>% filter(body.push == "[removed]", body == "[removed]"))
+    print(paste("Both were removed: ", x2))
+    x3 = (nrow(df.join %>% filter(body.push  != "[deleted]", body == "[removed]")))
+    print(paste0("Deleted on Reddit after Pushift scraped: ", x3))
+    x4 = nrow(df.join %>% filter(body.push == "[deleted]", body != "[deleted]"))
+    print(paste("Pushift deleted but recovered by now: ", x4))
+    x5 = nrow(df.join %>% filter(body.push != "[removed]", body == "[removed]"))
+    print(paste("Removed on Reddit after Pushift scraped: ", x5))
+    x6 = nrow(df.join %>% filter(body.push == "[removed]", body != "[removed]"))
+    print(paste("Pushift removed but recovered by now: ", x6))
+    x7 = nrow(df.join %>% filter(author == "AutoModerator"))
+    print(paste("AutoMod comments: ", x7))
   }
-  return(df.compr)
+  df.join <- df.join %>%
+    filter(body != "[removed]" & body != "[deleted]" & body.push != "[removed]" &
+             body.push != "[deleted]" & author != "AutoModerator") %>%
+    dplyr::select(id.push, author, body, link_id, permalink) %>%
+    rename(id = id.push)
+  return(df.join)
 }
 
 #not tested, translted from Python
@@ -128,5 +140,12 @@ clean_comm.push <- function(source_dir, bot_epoch, report = TRUE, save_dir){
   return(df)
 }
 
-x = as_datetime(1660857409)
-x + ddays(30)
+find_metrics <- function(df.score, df.api, join_id){
+  if (join_id=="permalink"){
+    df <- left_join(df.score, df.api, by = c("permalink" = "permalink.score"))
+  }
+  if (join_id == "id"){
+    rename(df.api, id.api = id)
+    df <- left_join(df.score, df.api, by = c("id" = "id.api"))
+  }
+}

@@ -7,7 +7,7 @@ bibliography: bot-moderation.bib
 
 # Descriptive Statistics - Upvotes
 
-```{r routine-load-clean, echo = F, results = F}
+```{r routine-load, echo = F, results = F}
 rm(list = ls())
 
 .libPaths()
@@ -26,24 +26,15 @@ library(kableExtra)
 library(rddtools)
 library(magrittr)
 
-fds_retrv <- read_csv("E:/gihub-data/redditbots/fds/fds_comment_retrieved.csv")
+source("redditbots_function.R")
+```
 
-fds_short <-  fds_retrv %>%
-  select(total_awards_received, approved_at_utc, edited, banned_by,
-         removal_reason, link_id, replies, id, banned_at_utc,
-         gilded, author, created_utc, parent_id, score, mod_note, all_awardings,
-         subreddit_id, subreddit, body, awarders, name, downs, associated_award,
-         stickied, can_gild, top_awarded_type, permalink, num_reports, 
-         report_reasons, created, treatment_tags, controversiality, mod_reports,
-         ups, downs, author_fullname)
-
-
-fds_short <-  fds_short %>%
-  mutate(created_date = date(as_datetime(created_utc)))
+```{r clean, echo = F, results = F}
+fds.api <- clean_comm.api("E:/gihub-data/redditbots/fds/fds_comment_retrieved.csv")
 ```
 
 ```{r ups-by-day, echo = F}
-fds_short %>% group_by(created_date) %>%
+fds.api %>% group_by(created_date) %>%
   summarise(mean_up = mean(ups)) %>%
   ggplot(., aes(x=created_date, y=mean_up)) +
   geom_line()+
@@ -68,7 +59,7 @@ fds_short %>% group_by(created_date) %>%
 
 # Descriptive statistics - Controversality (2) {.smaller}
 ```{r controversiality, echo = FALSE, results = FALSE}
-fds_short %>% group_by(created_date) %>%
+fds.api %>% group_by(created_date) %>%
   mutate(rel_time.d = as.numeric(difftime(created_date, as_datetime(1572234835), units = "days"))) %>%
   filter(rel_time.d <=15 & rel_time.d >= -15) %>%
   summarise(mean_contro = mean(controversiality)) %>%
@@ -89,39 +80,12 @@ fds_short %>% group_by(created_date) %>%
 ```
 
 # Compare with Pushshift.io {.smaller}
-```{r pushift-data-load, echo = F, results = F}
-fds_push_full <- read_csv("E:/gihub-data/redditbots/fds/fds_comments.csv")
+```{r compare-pushift-api, echo = F, results = F}
+fds.push <- read_csv("E:/gihub-data/redditbots/fds/fds_comments.csv")
+compr <-  join_push.api(df.push = fds.push, df.api = fds.api, report = TRUE) 
 ```
+
 ```{r clean-pushift-data, echo = F, results = F}
-fds_pushs <- fds_push_full %>%
-  select(author, body, id, link_id, permalink)
-fds_pushs <- fds_pushs %>%
-  rename(author.push = author, body.push = body, id.push = id,
-         link_id.push = link_id, permalink.push = permalink)
-
-# num deleted
-fds_pushs %>% filter(body.push == "[deleted]") #809
-fds_pushs %>% filter(body.push == "[removed]") #20,390
-fds_short %>% filter(body == "[deleted]" | body == "[removed]")
-
-# join the two data
-fds_compr <- left_join(fds_pushs, fds_short, by = c("id.push" = "id"), prefix = c(".x",".y"))
-
-# (1) both deleted = 809
-fds_compr %>% filter(body.push == "[deleted]", body == "[deleted]")
-# (2) both removed = 11,406
-fds_compr %>% filter(body.push == "[removed]", body == "[removed]")
-
-# (3) push not deleted, but reddit is deleted = 19,552
-fds_compr %>% filter(body.push != "[deleted]", body == "[deleted]")
-# (4) push is deleted, but reddit is not deleted = 0
-fds_compr %>% filter(body.push == "[deleted]", body != "[deleted]")
-
-# (5) push is not removed but reddit is removed = 6,324
-fds_compr %>% filter(body.push != "[removed]", body == "[removed]")
-# (6) push is removed but reddit is not removed = 8,984
-fds_compr %>% filter(body.push == "[removed]", body != "[removed]") # take this 
-
 removed_comments.id <- fds_compr %>% 
   filter(body.push == "[removed]", body != "[removed]") %>%
   select(id.push)
@@ -173,6 +137,7 @@ fds_metrics_add <- fds_metrics_add %>%
 
 # rbind the pushift and the additional
 fds_metrics <- rbind(fds_metrics_org, fds_metrics_add)
+rbind(fds_score, fds_score_add)
 ```
 
 ## Controversiality Correlation {.smaller}
@@ -234,6 +199,12 @@ Track users who posted toxic/identity attack/insults/controversial comments:
 - Which are other communities they posted on with similar topics/with similar interests.
 
 - Worst case: See if the person change their language in other subreddits.
+
+##
+
+```{r}
+
+```
 
 ## Reference
 
