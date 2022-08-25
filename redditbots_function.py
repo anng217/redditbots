@@ -148,4 +148,40 @@ def author_comments(df, bot_epoch, duration, limit = 10000000000, enhance = True
     return pd.concat(res_df)
 
 
+def within60days(df, bot_epoch, duration):
+    before, after = get_epochdate(bot_epoch = bot_epoch, duration = duration)
+    res = df.loc[(df['created_utc'] >= after) & (df['created_utc'] <= before)]
+    return res
 
+# Get list of authors 
+def author_list(df):
+    nomod = df.loc[(df['author'] != "AutoModerator") & (df['author'] != '[deleted]')]
+    authors = nomod.loc[:,'author']
+    authors_unique = np.unique(authors)
+    return authors_unique
+
+# Get comments based on author id
+def author_comments(df, bot_epoch, duration, limit = 10000000000):
+    before, after = get_epochdate(bot_epoch, duration) 
+    #creating loop so that only 100 authors per praw
+    tic = time.time()
+    global res
+    res = []
+    authors = author_list(df)
+    i = 0
+    while i < len(authors):
+        j = min(i+2, len(authors))
+        x = ','.join(authors[i:j])
+        comments = api.search_comments(author = x, limit = limit, before = before, after = after, filter = ['id', 'banned_at_utc', 'mod_reason_title', 'author', 'created_utc', 'parent_id', 'subreddit_id', 'body'], mem_safe= True)
+        res += [c for c in comments]
+        if i%500 == 0:
+            res_out = pd.DataFrame(res)
+            res_out.to_csv('author_comments_' + str(i/1000) + '.csv', encoding = 'utf_8_sig')
+            res = []
+        i +=2
+        if i%100 == 0:
+            time.sleep(1)
+            print('Time elapsed: ', round(time.time() - tic),' secs, i = ',i+5)
+    res_out = pd.DataFrame(res)
+    res_out.to_csv('author_comments_Finale.csv', encoding = 'utf_8_sig')   
+    return res_out
