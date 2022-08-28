@@ -1,5 +1,5 @@
 ---
-title: "Descriptive Stats"
+title: "Aug 24th"
 format: revealjs
 editor: visual
 bibliography: bot-moderation.bib
@@ -52,12 +52,14 @@ fds.api %>% group_by(created_date) %>%
         panel.background = element_blank(),
         axis.line = element_line(colour = "black"))
 ```
+
 # Descriptive statistics - Controversiality (1) {.smaller}
 
--   Controversiality: "The identification of controversial content is determined by the Reddit's formula for controversial comments, the final labeling for which is provided through the Reddit API. According to Reddit/'s definition, a comment is controversial if 1) the sum of up- and down-votes is greater than or equal to 7, and 2) the ratio of up- and down-votes lies between selected upper (ub = 0.6) and lower bounds (lb = 0.4) as shown in equation (1). We found the algorithm responsible for identifying controversial comments in the reddit-archive repository in GitHubFootnote3.".[Jasser et al. 2022]
+-   Controversiality: "The identification of controversial content is determined by the Reddit's formula for controversial comments, the final labeling for which is provided through the Reddit API. According to Reddit/'s definition, a comment is controversial if 1) the sum of up- and down-votes is greater than or equal to 7, and 2) the ratio of up- and down-votes lies between selected upper (ub = 0.6) and lower bounds (lb = 0.4) as shown in equation (1). We found the algorithm responsible for identifying controversial comments in the reddit-archive repository in GitHubFootnote3.".\[Jasser et al. 2022\]
 -   Source: Reddit API
 
 # Descriptive statistics - Controversality (2) {.smaller}
+
 ```{r controversiality, echo = FALSE, results = FALSE}
 fds.api %>% group_by(created_date) %>%
   mutate(rel_time.d = as.numeric(difftime(created_date, as_datetime(1572234835), units = "days"))) %>%
@@ -80,6 +82,7 @@ fds.api %>% group_by(created_date) %>%
 ```
 
 # Compare with Pushshift.io {.smaller}
+
 ```{r compare-pushift-api, echo = F, results = F}
 fds.push <- read_csv("E:/gihub-data/redditbots/fds/fds_comments.csv")
 compr <-  join_push.api(df.push = fds.push, df.api = fds.api, report = TRUE) 
@@ -97,6 +100,7 @@ fds_suppl <- fds_suppl %>%
          subreddit, score, controversiality) %>%
   mutate(post = ifelse(created_utc > 1572234835, 1, 0))
 ```
+
 | Pushift - Reddit API | Num    |
 |----------------------|--------|
 | Cannot recover       | 12,215 |
@@ -141,6 +145,7 @@ rbind(fds_score, fds_score_add)
 ```
 
 ## Controversiality Correlation {.smaller}
+
 ```{r rdd-controveriality, echo = F, results = T}
 kable(cor(fds_metrics %>% 
       select(controversiality, ups, toxicity, insult, identity_attack, total_awards_received) %>%
@@ -149,6 +154,7 @@ kable(cor(fds_metrics %>%
 ```
 
 ## Controversiality Discontinuity (0)
+
 ```{r contro-rdd-same, echo = F, results = F}
 # cleaning 
 fds_metrics <- fds_metrics %>% 
@@ -167,6 +173,7 @@ summary(lm_same_slope)
 ```
 
 ## Controversiality Discontinuity (1)
+
 ```{r, echo = F, results = T}
 lm_dif_slope <- fds_metrics %>%
   filter(rel_time.d <= 15 & rel_time.d >= -15) %>%
@@ -179,6 +186,7 @@ summary(lm_dif_slope)
 ```
 
 ## Controversiality Discontinuity (2)
+
 ```{r controv-rdd-visual, echo = F, results = T}
 fds_metrics %>% 
   filter(rel_time.d <= 1 & rel_time.d >= -1) %>%
@@ -192,19 +200,23 @@ fds_metrics %>%
   ggtitle("Controversiality in 31-day period")
 ```
 
-## Strategies for H1 Controls and H3:{.smaller}
+## Strategies for H1 Controls and H3: {.smaller}
 
 Track users who posted toxic/identity attack/insults/controversial comments:
 
-- Which are other communities they posted on with similar topics/with similar interests.
+-   Which are other communities they posted on with similar topics/with similar interests.
 
-- Worst case: See if the person change their language in other subreddits.
+-   Worst case: See if the person change their language in other subreddits.
 
-##
+## Aug 24:
 
-```{r}
+-  Introducing Rewards
 
-```
+- Progress with neighbor communities and synthetic controls
+
+## Progress with synthetic controls
+
+
 
 ## Reference
 
