@@ -1,4 +1,4 @@
----
+ ---
 title: "Mitigating Harassment in Online Communities with Human-Bot Moderation: Insights from Reddit Communities"
 format: 
   docx:
@@ -15,13 +15,20 @@ bibliography: [E:/github/redditbots/paper/bot-moderation.bib]
 
 # Introduction
 
-The need to converse emerged since the dawn of human civilization. In this Internet age, that need for face-to-face conversation has evolved into the need for online conversation, which ranges from decade-old Internet Relay Chat and forums to today’s newsgroup and social networks. Not all conversations are civilized conversations. In online settings, because of online anonymity, people may engage in even more harmful activities [@pewanonymity], such as harassment and cyberbullying. Harassment does not only negatively affects 
-In a recent survey by Pew Research [@pewstateofharassment] , 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. Policymakers realized the Internet’s side effects; thus, several measurements have been implemented. Forty-eight states include cyberbullying and online harassment in their bullying laws for K-12 education, out of which forty-four states impose criminal sanctions on such actions [@cyberbullyingresearchcenter]. At the platform levels, platform owners also actively take action against online toxicity in response to such phenomenon. 
+The need to converse emerged since the dawn of human civilization. In this Internet age, that need for face-to-face conversation has evolved into the need for online conversation, which ranges from decade-old Internet Relay Chat and forums to today’s newsgroup and social networks. Not all conversations are civilized conversations. In online settings, because of online anonymity, people may engage in even more harmful activities [@pewanonymity], such as harassment and cyberbullying. Harassment does not only negatively affects individuals who participate in online communities but also harms said communities as a whole. 
 
-<mark>Marked text</mark>
-⦁	Harassment is bad for the targets of the activity; unpleasant experience, affects mental well-being and feeling of safety;
+<mark>citation</mark>
+
+In a recent survey by Pew Research [@pewstateofharassment] , 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. 
+
+
+The consequences of onlibe harassment on individuals are unpleasant in the short term and devastating in the long term.  
+
+Policymakers realized the Internet’s side effects; thus, several measurements have been implemented. Forty-eight states include cyberbullying and online harassment in their bullying laws for K-12 education, out of which forty-four states impose criminal sanctions on such actions [@cyberbullyingresearchcenter]. At the platform levels, platform owners also actively take action against online toxicity in response to such phenomenon. 
+
+<mark>⦁	Harassment is bad for the targets of the activity; unpleasant experience, affects mental well-being and feeling of safety;
 ⦁	Harassment is bad for the health of the community; erodes quality of community discourse; genuine community members may leave; genuine contributors may say less; interested potential members may opt not to join.
-Consequently, addressing harassment is a major focus of online communities.
+Consequently, addressing harassment is a major focus of online communities.</mark>
 
 # Theoretical Background
 
