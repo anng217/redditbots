@@ -22,7 +22,7 @@ The need to converse emerged since the dawn of human civilization. In this Inter
 In a recent survey by Pew Research [@pewstateofharassment] , 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. 
 
 
-The consequences of onlibe harassment on individuals are unpleasant in the short term and devastating in the long term.  
+Although the consequences of online harassment on individuals are more prominent in the short term, a few people who experienced it also reported that they suffered negative long-term impact [@pewconsequences].
 
 Policymakers realized the Internet’s side effects; thus, several measurements have been implemented. Forty-eight states include cyberbullying and online harassment in their bullying laws for K-12 education, out of which forty-four states impose criminal sanctions on such actions [@cyberbullyingresearchcenter]. At the platform levels, platform owners also actively take action against online toxicity in response to such phenomenon. 
 
