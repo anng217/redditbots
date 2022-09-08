@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="An Nguyen">
+<meta name="author" content="Arun Rai">
+<meta name="author" content="Likoebe Maruping">
+
+<title>Mitigating Harassment in Online Communities with Human-Bot Moderation: Insights from Reddit Communities</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="redditbot_files/libs/clipboard/clipboard.min.js"></script>
+<script src="redditbot_files/libs/quarto-html/quarto.js"></script>
+<script src="redditbot_files/libs/quarto-html/popper.min.js"></script>
+<script src="redditbot_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="redditbot_files/libs/quarto-html/anchor.min.js"></script>
+<link href="redditbot_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="redditbot_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="redditbot_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="redditbot_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="redditbot_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mitigating Harassment in Online Communities with Human-Bot Moderation: Insights from Reddit Communities</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>An Nguyen<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> </p>
+             <p>Arun Rai<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> </p>
+             <p>Likoebe Maruping<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="abstract-title">Abstract</div>
+    This paper sets out to explore the duality of human-bot moderation in mitigating harassment. We examine communities that use a block-list type of bot to prevent harassment from the source of harassment. We expect that the employment of the bot alongside human moderation will create a <em>shielding effect</em>- a declining trend of harassment towards community members, followed by an <em>emboldening effect</em> - an uptick in harassment by community members towards their perceived outgroup members, and, finally, a <em>spillover effect</em> - an increase in harassment in neighbor communities who share the same topic of discussion but not the same moderators. We use Detoxify, a BERT-based model, to determine the probability that a comment represents harassment. . We then use Bayesian Structure Time Series to examine the three types of effects of human-bot moderation in the communities under study
+  </div>
+</div>
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The need to converse emerged since the dawn of human civilization. In this Internet age, that need for face-to-face conversation has evolved into the need for online conversation, which ranges from decade-old Internet Relay Chat and forums to today’s newsgroup and social networks. Not all conversations are civilized conversations. In online settings, because of online anonymity, people may engage in even more harmful activities <span class="citation" data-cites="pewanonymity">(<a href="#ref-pewanonymity" role="doc-biblioref">Duggan 2021b</a>)</span>, such as harassment and cyberbullying. Harassment does not only negatively affects individuals who participate in online communities but also harms said communities as a whole.</p>
+<p>In a recent survey by Pew Research <span class="citation" data-cites="pewstateofharassment">(<a href="#ref-pewstateofharassment" role="doc-biblioref">Vogels 2021</a>)</span> , 41% of American states that they have personally experienced some forms of harassment, while 25% of those surveyed stated that they even received threats, stalking, sexual and sustained harassment. Although the consequences of online harassment on individuals are more prominent in the short term, a few people, especially women who experienced it, reported that they suffered negative long-term impact <span class="citation" data-cites="pewconsequences">(<a href="#ref-pewconsequences" role="doc-biblioref">Duggan 2021a</a>)</span>. More than that, harassment also poses great threats for the community as a whole, ranging from the quality erosion of content to exclusion of certain groups of contributors. A prominent example of this is 8chan, a loosely moderated image-board site where users can post images annonymously about anime, popular culture, to politics and sports <span class="citation" data-cites="8chanonwiki">(<a href="#ref-8chanonwiki" role="doc-biblioref">Wikipedia n.d.</a>)</span>. From its inception in 2013, the site was gradually dominated by a group of users with extreme ideologies, who drove away other genuninely interested contributors along with a variety of other topics. The site then turned into a home for antisemitism, misogyny, and anti-immigration ideologies. It was associated with a series of mass shooting in 2019: the New Zealand mass shooting at two mosques <span class="citation" data-cites="newzealand-shooting-8chan">(<a href="#ref-newzealand-shooting-8chan" role="doc-biblioref">Regan and Sidhu 2019</a>)</span>, El Paso mass shooting at Walmart <span class="citation" data-cites="elpaso-shooting-8chan">(<a href="#ref-elpaso-shooting-8chan" role="doc-biblioref">Mezzofiore and OŚullivan 2021</a>)</span>, and Dayton, Ohio mass shooting <span class="citation" data-cites="dayton-mass-shooting-8chan">(<a href="#ref-dayton-mass-shooting-8chan" role="doc-biblioref">Paul P. Murphy and Levenson 2019</a>)</span>. Consequently, the site was shut down by its network infrastructure provider <span class="citation" data-cites="cloudfare-cancel-8chan">(<a href="#ref-cloudfare-cancel-8chan" role="doc-biblioref">Cloudfare 2019</a>)</span>, web service <span class="citation" data-cites="voxility-cancel-8chan">(<a href="#ref-voxility-cancel-8chan" role="doc-biblioref">Robertson 2019</a>)</span>. Such incidents along with other related concerns pressure platforms to mainly focus on addressing harassment.</p>
+<p>Most platforms used human moderation as the immediate solution when they first encountered online toxicity. However, moderation by just human ran into several issues for platforms owner. <em>First,</em> as platform expands, governing with just human moderation as traditionally done is costly to scale up, considering how vast platforms have become over the last decades. <span class="citation" data-cites="gillespie2020content gillespie2018platform-and-content-moderation">(<a href="#ref-gillespie2020content" role="doc-biblioref">Gillespie 2020</a>, <a href="#ref-gillespie2018platform-and-content-moderation" role="doc-biblioref">2018</a>)</span>. <em>Second,</em> a number of research and reports show that human moderators, no matter paid or volunteer, experience burnout and emotional distress <span class="citation" data-cites="dosono2019moderation-emotional-labor Yang2019AIST">Snyder (<a href="#ref-tiktok-human-moderator-stress" role="doc-biblioref">2020</a>)</span>. Along with that, human moderators cannot be solely relied on in case of emergency. During the Covid-19 pandemic, platforms sent their human moderators home while starting to automate the moderating process <span class="citation" data-cites="facebook-sent-human-mod-home">Lapowsky (<a href="#ref-youtube-sent-human-mod-home-increase-removals" role="doc-biblioref">2020</a>)</span>. . <em>Last but not least,</em> although human judgement is always used as a standard, it known to have biases, especially towards delicate matter such as political ideology <span class="citation" data-cites="gillespie2018platform-and-content-moderation diakopoulos2011newscomments">(<a href="#ref-gillespie2018platform-and-content-moderation" role="doc-biblioref">Gillespie 2018</a>; <a href="#ref-diakopoulos2011newscomments" role="doc-biblioref">Diakopoulos and Naaman 2011</a>)</span>. Thus, the future of moderation cannot depend on human actions alone.</p>
+<p>Preparing themselves for the future of moderation, platform, and community owners shifted from using mainly humans to relying mostly on machines for moderation tasks, reasoning that machine is faster at scale <span class="citation" data-cites="gillespie2020content gorwa2020algorithmic">(<a href="#ref-gillespie2020content" role="doc-biblioref">Gillespie 2020</a>; <a href="#ref-gorwa2020algorithmic" role="doc-biblioref">Gorwa, Binns, and Katzenbach 2020</a>)</span>. For example, Wikipedia implemented a wide range of bots to automate tasks on each Wiki page, one of which is the ClueBot NG bot. This bot claims to detect whether an edit is an act of vandalism <span class="citation" data-cites="wikicluengbot">(<a href="#ref-wikicluengbot" role="doc-biblioref">Wikipedia 2021a</a>)</span>. Facebook also used AI intensively in its online moderation ranging from hate speech to misinformation detection <span class="citation" data-cites="facebook-ai-moderation">(<a href="#ref-facebook-ai-moderation" role="doc-biblioref">Schroepfer 2021</a>)</span>.</p>
+<p>Consistency is also a good virtue that machine brings to moderation tasks. In the case of Covid-19 pandemic, technology companies boasted their innitial results of switching to machine moderation. In a report, Facebook stated its independence of human moderators stating that 95% of the hate speech they have taken down was performed by Artificial Intelligence <span class="citation" data-cites="facebook-ai-moderation">(<a href="#ref-facebook-ai-moderation" role="doc-biblioref">Schroepfer 2021</a>)</span> despite several criticisms for dismissing its human moderators <span class="citation" data-cites="facebook-ai-mod-suck facebook-youtube-corona-crisis-criticism">(<a href="#ref-facebook-ai-mod-suck" role="doc-biblioref">Geigner 2021</a>; <a href="#ref-facebook-youtube-corona-crisis-criticism" role="doc-biblioref">Stokel-Walker 2020</a>)</span>. Despite its rising popularity in recent years, moderation relying solely on machines ignites a whole new level of concern given the inherently complicated landscape of moderation. <em>First</em>, as with many other tasks being automated, there is a burning question about whether machines can totally replace humans in such delicate matter. In this vein of discussion, <span class="citation" data-cites="gillespie2020content">Gillespie (<a href="#ref-gillespie2020content" role="doc-biblioref">2020</a>)</span> argues that although machine-based moderation is inevitable, humans must remain in the loop. The bias could come from the training datasets as proven in <span class="citation" data-cites="binns2017liketrainer">Binns et al. (<a href="#ref-binns2017liketrainer" role="doc-biblioref">2017</a>)</span>. <span class="citation" data-cites="gorwa2020algorithmic">Gorwa, Binns, and Katzenbach (<a href="#ref-gorwa2020algorithmic" role="doc-biblioref">2020</a>)</span> also raised the same concern by arguing that algorithmic moderation could create injustice in large-scale socio-technological systems. <em>Secondly</em>, in a similar vein with <span class="citation" data-cites="gorwa2020algorithmic">Gorwa, Binns, and Katzenbach (<a href="#ref-gorwa2020algorithmic" role="doc-biblioref">2020</a>)</span>, <span class="citation" data-cites="gillespie2020content">Gillespie (<a href="#ref-gillespie2020content" role="doc-biblioref">2020</a>)</span> concerns about transparency and accountability should there be no human in the loop. <em>Moreover</em>, the platform’s point of view about the trade between free speech and safety, <span class="citation" data-cites="gorwa2020algorithmic">Gorwa, Binns, and Katzenbach (<a href="#ref-gorwa2020algorithmic" role="doc-biblioref">2020</a>)</span> pointed out that purely algorithmic moderation would undermine the political nature of speech. <em>Last but not least,</em> Mark Zuckerberg admitted himself that machine is not sensitive to “nuances” in languages or the intent behind the comment yet, which inevitably can lead to misclassification <span class="citation" data-cites="Zuckerberg-content-moderation-nuances">(<a href="#ref-Zuckerberg-content-moderation-nuances" role="doc-biblioref">Canales</a>)</span>.</p>
+<p>Past discussions on platforms’ governance suggest that neither relying on solely humans nor machines works effectively for online moderation against harassment. Thus, human-machine moderation is a viable solution for the future of platform governance. More recent discussions, research included, on online moderation shifted their attention to human-machine moderation (Chandrasekharan, Gandhi, Mustelier, &amp; Gilbert, 2019; Jhaver, Birman, Gilbert, &amp; Bruckman, 2019; Kiene &amp; Hill, 2020; Kiene, Jiang, &amp; Hill, 2019). Through-out these studies, Reddit, Discord, and Twitch stand out as the most studied platforms for human-machine moderation. These platforms allow customized moderation at the community level: each community is run by a team of moderators, human and machine included. As a result, this decentralized governance invites a variety of governing modes across different communities. <span class="citation" data-cites="kiene2019modteam">Kiene, Jiang, and Hill (<a href="#ref-kiene2019modteam" role="doc-biblioref">2019</a>)</span> and <span class="citation" data-cites="kiene2020whousebot">Kiene and Hill (<a href="#ref-kiene2020whousebot" role="doc-biblioref">2020</a>)</span> studied the successful use of bot moderators when human moderators faced an exploded amount of content on Discord and Reddit. <span class="citation" data-cites="seering2018socialbot">Seering et al. (<a href="#ref-seering2018socialbot" role="doc-biblioref">2018</a>)</span> discovered that the moderation bot also played a social role in facilitating discussion on Twitch. Not only does the literature explore the overall effect of human-bot moderation, but it also dives into specific bots’ effects. <span class="citation" data-cites="chandrasekharan2019crossmod">Chandrasekharan et al. (<a href="#ref-chandrasekharan2019crossmod" role="doc-biblioref">2019</a>)</span> claimed to study the first “open source, AI-backed socio-technological moderation systems” - the Crossmod. Although the study confirmed the bot’s superior performance judging from human moderators’ positive feedback, in reality, it is not used as much as other bots on Reddit. As of July 2022, the bot seems to cease operation, judging from the two communities it is monitoring. The mixed results of human-machine’s moderation in research could be due to the fact that not all human-bot moderation is executed the exact same way.</p>
+<p>Generally, there are two mechanisms on which these moderation machines are built on. Consequently, there are two ways in which human and machine collaborate in moderating task. <em>The first mechanism</em>, also the more news-dominating one, is <em>based on Artifical Intelligence</em> (AI). The moderation machine that Facebook is using right now is a great example for the AI-based moderation machine <span class="citation" data-cites="facebook-ai-moderation">(<a href="#ref-facebook-ai-moderation" role="doc-biblioref">Schroepfer 2021</a>)</span>. Another example is Wikipedia’s ClueBot NG bot, which claims to autonomously detect whether an edit is an act of vandalism <span class="citation" data-cites="wikicluengbot">(<a href="#ref-wikicluengbot" role="doc-biblioref">Wikipedia 2021a</a>)</span>. Because of the autonomous property of the technology, AI-based bot may be associated with <em>human-out-of-the-loop</em> approach, which does not require human interaction in the process, rather than <em>human-in-the-loop</em> (HITL) approach. <em>Another mechanism</em> on which moderation machine is built is based on rules. Human will define rules and adjust the parameters according to their needs. Opposed to the AI-based machine, rule-based machines involves human’s interaction to adjust the parameter as human see fit. Often, these rule-based machines are embodied in bots. While getting little to no attention on the news headlines, rule-based bots are surprisingly common among platforms like Reddit and Discords.</p>
+<p>As the literature suggests <span class="citation" data-cites="gillespie2020content">(<a href="#ref-gillespie2020content" role="doc-biblioref">Gillespie 2020</a>)</span>, <em>human-in-the-loop</em> moderation is a better fit for moderation at community level as opposed to <em>human-out-of-the-loop moderation</em>. One prominent example of the two mechanism’s application is the Crossmod bot <span class="citation" data-cites="chandrasekharan2019crossmod">(<a href="#ref-chandrasekharan2019crossmod" role="doc-biblioref">Chandrasekharan et al. 2019</a>)</span> and the AutoModerator bot <span class="citation" data-cites="jhaver2019automod">(<a href="#ref-jhaver2019automod" role="doc-biblioref">Jhaver et al. 2019</a>)</span> on Reddit. Automod was developed independently in 2012, then was officially adopted as Reddit’s official tool in 2015. From its grassroots popularity, Automod rose to become the only platform-incorporated machine moderator as well as the most adopted bot across all communities. The authors highly believe that the stark contrast between the performance of Crossmod and Automod is due to the configuration of human-machine collaboration. While Auto¬mod includes human in many of its actions, human-in-the-loop mechanism, Crossmod only involves human’s judgement at the beginning and the end of the process, human-out-of-the-loop mechanism.</p>
+<p>Consistent with the examples and what have been theorized in the literature, we argue that human-in-the-loop mechanism works best for collaboration, particularly in the case of community moderation. Adding on to this growing human-bot moderation literature, we aim to explore one type of bot that has grown in popularity on such platforms. Specifically, we studied a block-list anti-harassment bot with human-in-the-loop mechanism. We expect that this human-in-the-loop mechanism will help ease the collaboration between bot and human, which eventually strengthens the good sides of solely human moderation. However, the machine’s block-list feature would work so effectively that the bot will lead the community to radicalism, with little to no space for civilized discussions.</p>
+<p>More than that, we also examine the effect of the human-bot moderation on other communties. Since most platforms host a series of communities (e.g., Facebook, Reddit, Discord, etc.), at least some communities within a platform may discuss the same issues. As the literature on moderation provide a strong patterns of spillover effect when moderation measurements are in place <span class="citation" data-cites="Chandrasekharan2017 Ali2021 Jhaver2021deplatforming">(<a href="#ref-Chandrasekharan2017" role="doc-biblioref">Chandrasekharan et al. 2017</a>; <a href="#ref-Ali2021" role="doc-biblioref">Ali et al. 2021</a>; <a href="#ref-Jhaver2021deplatforming" role="doc-biblioref">Jhaver et al. 2021</a>)</span>, we suggest that the introduction of bot to one community’s moderator team may affect other communities with similar topics.</p>
+<p>Thus, we propose the two research questions below to investigate this mode of cooperation between human and machine in content moderation. We expect that this collaboration will have effect on both the <em>focal community</em>, the community which is under the human-bot moderation, and the <em>neighbor community</em>, whose topic of interest is similar to that of the focal commnunity but lack of human-bot moderation team. Specifically, we ask: - How does human-bot moderation impact the level of harassment within the focal community? - How does community-level human-bot moderation impact the level of harassment in other similar communities?</p>
+</section>
+<section id="theoretical-background" class="level1">
+<h1>Theoretical Background</h1>
+<section id="toxicity-and-harassmnet" class="level2">
+<h2 class="anchored" data-anchor-id="toxicity-and-harassmnet">Toxicity and Harassmnet</h2>
+<p>Although the topic of online toxicity attracts scholars from various fields, policymakers, and platforms, little has been agreed on about the formal definition of toxicity (Jhaver et al., 2021). In this paper, we define toxicity similarly to the general belief, in which toxicity is an umbrella term for any daily offensive language, harassment, hate speech, etc. Under this umbrella term, we identify <em>harassment</em> and <em>non-harassment</em>. <em>Harassment</em> is any type of language that causes a reasonable person to feel unease or uncomfortable. The necessary condition for a harassing comment is that it must be targeted at either a person or a group. Otherwise, it is non-harassment.</p>
+<p>Researchers have yet to agree on any unified classification in harassment. In this paper, we are interested in two specific definitions that fall into harassment: identity attack and insult. Identity attack is a ”negative or hateful comment targeting someone because of their identity”, while insult is ”inflammatory, or negative comment towards a person or a group of people” <span class="citation" data-cites="perspective-api-6-types">(<a href="#ref-perspective-api-6-types" role="doc-biblioref">PerspectiveAPI 2022</a>)</span>. Below is an example of the two types of harassment in the community r/femaledatingstrategy:</p>
+<ul>
+<li><p>Insult: “I diagnose you with retardation”; “youre honestly a disgusting person and its sad you exist. maybe one day you’ll stop hating yourself and mature, but probably not. have a good day you cancer-to-society. I can only hope you all realize how insane and toxic you are”; “this subreddit is fucking evil - a man.”</p></li>
+<li><p>Identity Attack: “Shut up feminist”; “If women are so smart and capable compared to men how did they get subdued for all of human history so easily?Like, really easy. Like, pervasively and unanimously easily.You’re like the right wing nutjobs that screech about how jews have infiltrated all of high society and are masterminds yet somehow are brainless, genetically inferior slugs that deserve to be wiped out”;“F*ck these n*ggas.”</p></li>
+</ul>
+<p>As in the two examples above, not all comments use profane language to be classify as harassment. This is due to the fact that language can be used in a seemingly civilized way but not to construct a civilized conversation. Furthermore, as we explore further in the below sections, language use in a community will evolve due to the community’s characteristics as well as evade moderation.</p>
+</section>
+<section id="social-catergorization-lense" class="level2">
+<h2 class="anchored" data-anchor-id="social-catergorization-lense">Social Catergorization Lense</h2>
+<p>Much has been researched about the language of harassment. In this paper, we aim to investigate the source of harassment and its underlying mechanism under the condition of human-bot moderation. We use the Social Categorization theory lens<span class="citation" data-cites="kawakami2017intergroup">(<a href="#ref-kawakami2017intergroup" role="doc-biblioref">Kawakami, Amodio, and Hugenberg 2017</a>)</span> to understand why harassment exists among groups with different ideology.</p>
+<p><span class="citation" data-cites="kawakami2017intergroup">Kawakami, Amodio, and Hugenberg (<a href="#ref-kawakami2017intergroup" role="doc-biblioref">2017</a>)</span>’s synthesis proposed that human generally put other humans into groups to navigate the complex world while minimizing their cognitive efforts. This effect intensifies under the condition of uncertainty and excessive information, which characterizes the Internet and online communities well. The most effortless and basic categorization is simplifying other people into two groups: <em>ingroup</em> versus <em>outgroup</em>, with ingroup being the people who share the same belief and the outgroup being the people with different personal attribute or opposing ideology. While the <em>ingroup</em> are mainly composed of people of the same ideology who discuss the topic, the <em>outgroup</em> may or may not be a formed group but rather a perception of ingroup members. For example, for anti-immigration group, ingroup members may discuss why immigration is bad for their city, state, country. The outgroup members are the immigrants (based on personal attributes, may not be formally formed) and pro-immigration groups (is based on ideology, may be formally formed). Another example that lies closer to our current research is the misandy group as ingroup members. They perceive any men (is based on personal attribute, may not be formally formed) and misogynistic group (based on ideology) as outgroup members. This mentality plays an important role in motivating humans to conduct acts of harassment.</p>
+<section id="source-target-and-acts-of-harassment" class="level3">
+<h3 class="anchored" data-anchor-id="source-target-and-acts-of-harassment">Source, Target, and Acts of Harassment</h3>
+<p>Because of social categorization, an individual may have positive feelings towards the ingroup members and negative feelings towards the outgroup members <span class="citation" data-cites="dovidio2002implicit">(<a href="#ref-dovidio2002implicit" role="doc-biblioref">Dovidio, Kawakami, and Gaertner 2002</a>)</span> although there may not be too much difference among these people. For example, people who support gun control might think of people who support gun rights as apathy towards living things; thus, gun rights supporters must dislike pets. However, it is not neccessarily true. Both groups (gun control and gun right supporters) may enjoy pet companion all the same.</p>
+<p>This bias serves as a source of hostility, derogation, and intent to harm to the outgroup members <span class="citation" data-cites="pettigrew1995subtle">(<a href="#ref-pettigrew1995subtle" role="doc-biblioref">Pettigrew and Meertens 1995</a>)</span>. We will refer these groups with intent to harm outgroup members as the <em>source of harassment</em>. The target for the ingroup’s derogation is the perceived outgroup, which will be called the <em>target of harassment</em> in the study.</p>
+<p>In online communities, individuals interact with one another using text-based and image-based exchange. Since the communities lack of the real world’s physicality, the <em>act of harassment</em> can be seen through these exchanges: text and images. In this study, we emphasize on the language side of the exchange. Based on the language used in the communities, we identify whether the language is harassment or not; thus, whether there is an <em>act of harassment</em> or not. <a href="#fig-source-target-act">Figure&nbsp;1</a> presents the relationship among the three components we presented: the source, the target, and the act of harassment.</p>
+<div id="fig-source-target-act" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="source-target-act.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 1: Source, Target, and Acts of Harassment. The circle depicts online communities</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="focal-community-and-neighbor-community" class="level3">
+<h3 class="anchored" data-anchor-id="focal-community-and-neighbor-community">Focal Community and Neighbor Community</h3>
+<p><em>Good. I wonder if we might flip the order of the argument in this paragraph. Instead of opening with definitions of focal versus neighbor community, we could open with the idea that we want a broader accounting of the effects of human-bot moderation. Such approaches could be locally beneficial but broadly deleterious in their effects. To explore this idea, we distinguish between the focal community—where human-bot moderation is being enacted—and neighbor community—which are adjacent (content/topic-wise) but do not use such moderation.</em></p>
+<p>Based on the social categorization lens, acts of harassment are best manifested between the two contrasteive groups based on their characteristics such as gender, race, age, etc. In this study, we focus on one of those characteristics: gender. Recent years have seen an explosion of attention to manosphere, an umbrella term for online communities with misogyny and anti-feminism propaganda (Chandrasekharan, Jhaver, Bruckman, &amp; Gilbert, 2020). These communities are dangerous because of their linkage to real life mass shootings (Chemaly, 2015). Some most popular and prominent manosphere online communities include r/TheRedPill, r/mengoingtheirway, r/pickupartists on Reddit, 4chan’s “ROBOT 90001” <span class="citation" data-cites="4chan-incels">(<a href="#ref-4chan-incels" role="doc-biblioref">Beran 2018</a>)</span>. The quick growth and spread of these communities draw a stark contrast between male and female’s value in online communities. In response, many ultra-feminist groups were established as a safe space for women to share and discuss misandry. These groups are relatively younger than misogynistic groups; thus, they accumulate enough platform experience to live among other healthy communities, specifically the use of bots against any acts of harassment.</p>
+<p>Similar to misogynistic communities, misandrist communities often exist in clusters, meaning that there exists more than just one community (e.g., r/femaledating trategy, r/wgtw, r/WitchesVSPatriarchy, etc.). However, only some of the communities with the same intetests utilize bots as a defense mechanism against the source of harassment while the rest do not. This fact enables us to study the human-bot moderation’s local, beneficial effect of human-bot moderation and its deleterious, overall effect. To set up for the study, we distinguish between the <em>focal community</em> and <em>neighbor community</em>, with <em>focal community</em> being the commnunity the bot was implemented while the <em>neighbor community</em> being the community with similar topic of discussion but not the human-bot moderation.</p>
+<p>The local and adjacent effect on focal and neighbor communities are common in the online community stream of literature, especially when the focus is on evaluating the effects of moderation strategy. For example, in studying deplatforming, removing one person from the platform, <span class="citation" data-cites="Jhaver2021deplatforming">Jhaver et al. (<a href="#ref-Jhaver2021deplatforming" role="doc-biblioref">2021</a>)</span> concludes that deplatforming helps reduce the level of offensiveness and toxicity in that platform However, <span class="citation" data-cites="Ali2021">Ali et al. (<a href="#ref-Ali2021" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="Rauchfleisch2021">Rauchfleisch and Kaiser (<a href="#ref-Rauchfleisch2021" role="doc-biblioref">2021</a>)</span> discovers that deplatforming pushes extreme users to more toxic venues outside of the platform. Thus, we argue that to study the whole picture of human-bot moderation, one must examine its focal effects and its spillover, which, in this case, the effects on focal communities and neighbor communities.</p>
+</section>
+</section>
+<section id="human-machine-moderation" class="level2">
+<h2 class="anchored" data-anchor-id="human-machine-moderation">Human Machine Moderation</h2>
+<p><em>Do we need a broad conceptualization of bots somewhere? Either here or somewhere in the introduction?</em> In our research, we focus on the rule-based bot rather than AI-based bot because of the two following reasons. <em>First</em>, although AI-powered moderation has been significantly advanced in these years and proudly used by platform owners <span class="citation" data-cites="twitter-ai-moderation facebook-ai-moderation">(<a href="#ref-twitter-ai-moderation" role="doc-biblioref">Newcomb 2019</a>; <a href="#ref-facebook-ai-moderation" role="doc-biblioref">Schroepfer 2021</a>)</span>, community moderators still opt for rule-based bot moderators. Prominently, the rule-based Automod rose to popularity and recommended by Reddit without any AI-backed algorithm. Moreover, on Reddit and Discord almost all of the most adopted moderation bots are also rule-based rather than AI-powered bots <span class="citation" data-cites="reddit-list-of-bots-most-popular discord-list-of-bots">(<a href="#ref-reddit-list-of-bots-most-popular" role="doc-biblioref">BotWatch 2021</a>; <a href="#ref-discord-list-of-bots" role="doc-biblioref">www.top.gg 2022</a>)</span>. One can argue that these human moderators are not paid or trained to fine-tune moderation bots, thus the low adoption rate. Another possible explanation for rule-based bot’s popularity is that these unpaid, volunteer moderators do the work out of their passion for the community. Thus, they require the bot to be more controllable. In other words, the more transparency the bot is, the more collaborative it is to these human moderators. <em>Second</em>, no matter under which mechanism the bot is based on, the decision of moderation is of high sensitivity and often finally made by human. The main difference among human-machine moderation strategies is not what type of bot is implemented but how much and at which stage human’s action is involved. As we ground our research on online communities rather than platform, we focus on the rule-based bots rather than the AI-based ones.</p>
+<section id="human-out-of-the-loop-versus-human-in-the-loop-moderation" class="level3">
+<h3 class="anchored" data-anchor-id="human-out-of-the-loop-versus-human-in-the-loop-moderation">Human-out-of-the-loop versus Human-in-the-loop Moderation</h3>
+<p>Human-in-the-loop (HITL) and human-out-of-the-loop (HOOTL) are the two different mechanisms in which humans involve differently in the human-bot collaboration. In both cases, human is the locus of decision. However, we define HITL moderation as the type of human-machine collaboration in which human provides iterative inputs to fine-tune the parameters of the machine and jointly produce the decision. Meanwhile, HOOTL mechanism only requires humans to provide the input only. Once the machine produces the results, human will rely on that result and make final decision. Since HITL involves continuous feedback through various steps of data processing <span class="citation" data-cites="wu2022surveyofHITL">(<a href="#ref-wu2022surveyofHITL" role="doc-biblioref">Wu et al. 2022</a>)</span> , it is more practical for delicate matters like online moderation against ha¬rassment. In this argument, we propose a further implication: regardless of the nature of machine, HITL is useful for online moderation. Figure 2 illustrates the two concepts. It does not only dictate how much the bot is used, but it also implies how effective the bot is.</p>
+<div id="fig-human-loop" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="humanvsloop.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 2: Human-out-of-the-loop (below) and human-in-the-loop (above) illustration. Adapted from <span class="citation" data-cites="wu2022surveyofHITL">Wu et al. (<a href="#ref-wu2022surveyofHITL" role="doc-biblioref">2022</a>)</span></figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="ai-based-moderation" class="level3">
+<h3 class="anchored" data-anchor-id="ai-based-moderation">AI-based Moderation</h3>
+<p>In detecting harassment, AI-based moderation often relies on the performance of natural language processing (NLP) models. Traditionally, the NLP model will predict whether a text instance is classified as harassment or not. In Crossmod example, the bot scans comments, then detects harmful content via back-end, cross-community Machine Learning algorithm, and finally informs human moderators if a comment is suspected to be harmful <span class="citation" data-cites="chandrasekharan2019crossmod">(<a href="#ref-chandrasekharan2019crossmod" role="doc-biblioref">Chandrasekharan et al. 2019</a>)</span>. This mechanism fits with HOOTL definition in that human does not interfere with any fine-tuning. As we already cover, this type of moderation falls out of favor because it is not practical for volunteer, unpaid, untrained community moderators. <span class="citation" data-cites="august2020explain-like-iam-a-scientist trujillo2021community-language-post-ban">(<a href="#ref-august2020explain-like-iam-a-scientist" role="doc-biblioref">August et al. 2020</a>; <a href="#ref-trujillo2021community-language-post-ban" role="doc-biblioref">Trujillo et al. 2021</a>)</span> discovered that communities’ specialized language does not stay static. While communities naturally develop their sets of specialized language, the bot is fed on a cross-community data. Inevitably, the bot cannot detect harassment in a specific community’s language as it has never learned it before. Moreover, harmful users may evade ban by using new ways of insulting without explicit profanity that goes undetectable by machine. To resolve this, newly developed framework use Adversarial Attacks <span class="citation" data-cites="dinan2019-adversarial-attack">(<a href="#ref-dinan2019-adversarial-attack" role="doc-biblioref">Dinan et al. 2019</a>)</span>, which includes human in the loop. The adversarial attack starts with build it process where a language model is applied to detect harassment. Next, crowd-sourced workers, humans, are asked to write harassing comments that go unde-tected by machine to break the model. Then, during the fix it phase, the whole model is retrained with newly collected data. The whole process repeats at build it. This inclusion of human in the model promised a better detection, especially when context-based harassment evolves to avoid machine detection.</p>
+</section>
+<section id="rule-based-moderation" class="level3">
+<h3 class="anchored" data-anchor-id="rule-based-moderation">Rule-based Moderation</h3>
+<p>Although most of the conversations around human-in-the-loop focuses on AI-type of machine, we extend the definition beyond that. Human-in-the-loop also appears in other less sophisticated machine like rule-based bots. Platforms that rely on community level mod-erators like Reddit and Discord made customization accessible to community moderators. For Discord, once a server (community) employed a bot, human moderator only needs a single line command to ask the bot to perform a task or the human mod will see intuitive interface as depicted in Figure 4. Reddit’s open data coupled with its readily available Application Programming Interface (API) and pushshift.io Reddit API allows independent developers to scan contents and perform basic moderation tasks such as remove duplicated posts, detect spams, welcome new members, answer basic conversion questions, etc. To communicate with human moderators, most of the bots allow human moderator to compose syntactic rules in YAML format - human-friendly data language. Figure 3 presents an example of YAML syntax by the saferbot.</p>
+<div id="fig-interface-human-bot-discord" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Pro-mod-Discord.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 3: A snapshot of interface between human and rule-based bot on Discord.</figcaption><p></p>
+</figure>
+</div>
+<p>Because the bot’s functions are straight-forward and its interface is intuitive, human can interact with the bot to change the parameter of moderation anytime. For example, human may first set the definition of spammers as any users who post 5 comments per minute. However, they soon learn that normal users can contribute 5 comments in one minute. In that case, human moderators can easily and quickly change the parameters to ban users who post 10 comment per minute. We define this immediate and customized feature as human-in-the-loop mechanism for rule-based bots.</p>
+<div id="fig-interface-human-bot-reddit" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Reddit_mod_function.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 4: A snapshot of interface between human and rule-based bot on Reddit.</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="moderation-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="moderation-strategy">Moderation Strategy</h3>
+<p>Most commonly, moderation is characterized by its scope of impact: content moderation, user moderation, and community moderation. Content moderation is the lowest level of mod¬eration, which focuses on the specific information exchanged by individuals. By default, virtually all platforms hosting online conversation has rules and regulations to moderate content. For example, Wikipedia’s editor can add, revert, delete, and flag information deemed inappropriate for the platform <span class="citation" data-cites="pageofwiki">(<a href="#ref-pageofwiki" role="doc-biblioref">Wikipedia 2021b</a>)</span>. Twitter also employs a variety of content moderation such as labeling, limiting visibility, and removing Tweets for its users <span class="citation" data-cites="TwitterContent">(<a href="#ref-TwitterContent" role="doc-biblioref">Twitter 2020</a>)</span>. Because of its ubiquity, much of past and current research effort has been spent at content level of moderation.</p>
+<p><span class="citation" data-cites="jhaver2018content-removal jhaver2019content-removal">Srinivasan et al. (<a href="#ref-srinivasan2019content-removal" role="doc-biblioref">2019</a>)</span> found out that <em>content removal</em> as a moderation strategy worked best un¬der moderation’s transparency. As platform evolves, so does the challenge for content moderation. Voice-based (Discord) and video-based (Twitch) platform are becoming more relevant today; thus, content moderation departs from merely processing texts to process¬ing voice and images. The challenge was investigated by <span class="citation" data-cites="Jiang2019voice-based">(<a href="#ref-Jiang2019voice-based" role="doc-biblioref">Jiang et al. 2019</a>)</span>.</p>
+<p>An equally popular form of moderation focuses at a higher level: <em>user moderation</em>. Twitter has by far more policies on user than most of other platforms. Their user moderation actions include profile editing, placing read-only mode, verifying identity, etc. Reddit, a so¬cial news platform, also impose a number of user-level moderation actions to ensure the health of its communities, namely: banning, muting, shadow banning <span class="citation" data-cites="Redditban">(<a href="#ref-Redditban" role="doc-biblioref">Reddit 2022b</a>)</span>. While Twitter’s user ban is a platform decision, Reddit user ban is usually a community level decision as Reddit’s governance is less centralized. Researchers often conduct study on the effectiveness of deplatforming Twitter users with a huge base of followers. Although some studies may show positive effects on the platform after deplatforming vocal, toxic users <span class="citation" data-cites="Jhaver2021deplatforming">(<a href="#ref-Jhaver2021deplatforming" role="doc-biblioref">Jhaver et al. 2021</a>)</span>, others may suggest that deplatforming are not as effective as it is thought to be as users may relocate elsewhere outside of the platform <span class="citation" data-cites="Ali2021 Rauchfleisch2021">(<a href="#ref-Ali2021" role="doc-biblioref">Ali et al. 2021</a>; <a href="#ref-Rauchfleisch2021" role="doc-biblioref">Rauchfleisch and Kaiser 2021</a>)</span>. Directly related to the current research, block-list type bot is also classified as moderation toward users. <span class="citation" data-cites="Jhaver2018blocklist">(<a href="#ref-Jhaver2018blocklist" role="doc-biblioref">Jhaver, Ghoshal, et al. 2018</a>)</span> presented a well-rounded overview of block-list type of bots on Twitter by inter¬viewing the block source and block target. We are set on a different direction to investigate block-list type bots’ effects on language use rather than community’s sentiments.</p>
+<p>The last and the rarest form of moderation level is <em>community moderation</em>, which is famously used by Reddit. Different from the majority of social media platforms, Reddit organizes its communities into subreddits, where Reddit users can discuss topics allowed within one community. Similar to deplatforming, moderating community also has its good sides and its bad sides. At first, members of the moderated platform will be less toxic <span class="citation" data-cites="Chandrasekharan2017 trujillo2021community-language-post-ban">(<a href="#ref-Chandrasekharan2017" role="doc-biblioref">Chandrasekharan et al. 2017</a>; <a href="#ref-trujillo2021community-language-post-ban" role="doc-biblioref">Trujillo et al. 2021</a>)</span>. However, the effects are heterogeneous as some platforms refuse to change their topic <span class="citation" data-cites="chandrasekharan2020quarantined">(<a href="#ref-chandrasekharan2020quarantined" role="doc-biblioref">Chandrasekharan et al. 2020</a>)</span> and continue to use toxic language in a way to evade moderation <span class="citation" data-cites="trujillo2021community-language-post-ban">(<a href="#ref-trujillo2021community-language-post-ban" role="doc-biblioref">Trujillo et al. 2021</a>)</span>.</p>
+<p>To provide our readers with the clearest picture of the type of bot we are pursuing in this study, we include a table of summary type of bots, mode of collaboration, and strategy for moderation in Table 1. While AI-based bots are more popular with platform level moderation strategy, rule-based bots are communities’ favorite tools for bot moderation.</p>
+<div id="tbl-bot-mech-and-examples" class="anchored">
+<table class="table">
+<caption>Table 1: Bot Mechanisms and Examples</caption>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 43%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><br></th>
+<th>AI-based Bots</th>
+<th>Rule-based Bots</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Human-out-of-the-loop</td>
+<td>Facebook’s AI algo­rithms (Schroepfer, 2021)</td>
+<td>N/A</td>
+</tr>
+<tr class="even">
+<td>Human-in-the-loop</td>
+<td>Adversarial Attack (Dinan et al., 2019)</td>
+<td>Most bots on Reddit and Discord</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="hypotheses" class="level2">
+<h2 class="anchored" data-anchor-id="hypotheses">Hypotheses</h2>
+<p>In the current study, we are interested in block-list bot, a rule-based bot with high degree of human-in-the-loop nature. We would like to examine its effectiveness on communities that are vulnerable to debates (e.g., misandry communities). Specifically, we expect that the human-bot moderation will first created a <em>shielding effect</em>, which protected the focal community from outsider’s harassment. Since the human-bot moderation has such strong shielding effect, the human-bot moderation will have an <em>emboldening effect</em>, that is an increase in harassment towards percieved outside group. Finally, as many online communities may discuss similar topics, we hypothesize that the neighbor communities who do not have the same human-bot moderation may suffer an increase in harassment. We call this last effect the <em>spillover effect</em>. Together, these effects provide a holistic view of the total effect of human-bot moderation implementation.</p>
+<section id="shielding-effects-of-human-bot-moderation" class="level3">
+<h3 class="anchored" data-anchor-id="shielding-effects-of-human-bot-moderation">Shielding Effects of Human-bot Moderation</h3>
+<p><em>It would be a good idea to define shielding effect in this paragraph. We likely want to enrich this argument by invoking the ingroup-outgroup concept of SCT. We also need to describe what it is about the human-bot moderation approach that creates this shielding effect. How do the two together do an effective job of identifying the act of harassment? What type of user moderation is applied that precipitates the subsequent decline in harassment? Articulating these elements would strengthen the argument.</em></p>
+<p>As Social Categorization lens suggests, groups with contrasted characteristics such as age, gender, race, etc. may be strongly influenced by the <em>ingroup vs.&nbsp;outgroup</em> psychological effect. Suppose we have a focal community who is under attack for their topic of discussions</p>
+<p>When the focal community only employs human moderators, these human moderators only take action against harassment on a case by case basis. As the topic of discussions are controversial and divided, these human moderators gradually realize that their best chance to shut down the acts of harassment in their community is to prevent harassment from the source, which conveniently is embodied in online communities with opposite views.</p>
+<p>To automatically prevent the source to perform any more acts of harassment, the human moderators evidently have to employ a machine partner that is effective yet flexible enough to prevent possible harassment as well as correct any misclassification. That is the main reason why the HITL bot is the first choice of many human moderators: HITL bot reflects the will of their human partner perfectly.</p>
+<p>The process of collaboration is simple. The human moderators define the source of harassment, then let the bot implement the prevention. This cooperation between bot and human in moderation to terminate acts of harassment creates a <em>shielding effect</em> on the <em>focal community</em>. By <em>shielding effect</em>, we mean the total protection of the focal community from their perceived sources of harassment. Because the human moderators effectively identify the source of harassment and the bot excellently execute what they are instructed to do, the focal community are under a perfect shielding effect from almost every possible act of harassment.</p>
+<p>We formally state our hypothesis as below:</p>
+<p><em><strong>H1</strong>: The harassment towards community members declines after the implementation of the moderation bot.</em></p>
+</section>
+<section id="emboldening-effects-of-human-bot-moderation" class="level3">
+<h3 class="anchored" data-anchor-id="emboldening-effects-of-human-bot-moderation">Emboldening Effects of Human-bot Moderation</h3>
+<p>*There appears to be some ambiguity regarding who is ingroup and who is outgroup. Is it constant in our theorizing here? In the earlier set up it sounded like pro-feminist was outgroup [target of harassment] and anti-feminist was the ingroup [source of harassment].</p>
+<p>Here it sounds like pro-feminist is the ingroup and anti-feminist (or less pro-feminist) is the outgroup.</p>
+<p>It would be useful to be clear about who we identify as ingroup versus outgroup. *</p>
+<p>While members within the focal community enjoys less harassment thanks to the bot’s action, human moderators now have more resources to curate the discussion within the community. Human moderators will weed out contents that are not harassment by nature but proposes an opposing view to the focal community’s general belief; thus creating echo chambers, a situation where “like-minded people reinforce each other opinion” <span class="citation" data-cites="sunstein2009 garrett2009echo">(<a href="#ref-sunstein2009" role="doc-biblioref">Sunstein 2009</a>; <a href="#ref-garrett2009echo" role="doc-biblioref">Garrett 2009</a>)</span>. At this point, the community turned from being harassed to carrying out harassment. The target of harassment is the community’s perceived outgroup. As the focal communities under our study mostly discuss controversial topics, they are prone to attack by people with opposite views. Furthermore, focal communities are also tempted to attack their percieved outgroup member, under the influence of Social Catergorization.</p>
+<p>For example, r/femaledatingstrategy’s general belief that men should pay the bill on the first date. Had the community not had the human-bot moderation, they would have recieved opposite comments and harassment from other people who hold different believe. Once they had the human-bot moderation to block harassment from the source, they would only see the respectful comments but with opposing view (such as the two should pay equally). Not havig to deal with harassment, human moderators how shift their focus to filter unwanted opinions. The discussions, thus, become less balanced. Topics of discussion could escalate to an increase level of harassment to men and misogynistic groups, r/femaledatingstrategy’s outgroups.</p>
+<p>Thus, we proposed the following hypothesis about this emboldening effect of the human-bot moderation:</p>
+<p><em><strong>H2</strong>: The harassment towards other outgroup members will increase in community discussion after the implementation of the bot.</em></p>
+</section>
+<section id="spillover-effects-of-human-bot-moderation" class="level3">
+<h3 class="anchored" data-anchor-id="spillover-effects-of-human-bot-moderation">Spillover Effects of Human-bot Moderation</h3>
+<p>Most communities are not unique in their topic of discussion. Misandry communities are not exception. Thus, to fully understand the total effect of the human-bot moderation in this case, we follow the best practice in online moderation literature, which is examining the spillover effect of the intervention <span class="citation" data-cites="Chandrasekharan2017 Ali2021 Jhaver2021deplatforming">(<a href="#ref-Chandrasekharan2017" role="doc-biblioref">Chandrasekharan et al. 2017</a>; <a href="#ref-Ali2021" role="doc-biblioref">Ali et al. 2021</a>; <a href="#ref-Jhaver2021deplatforming" role="doc-biblioref">Jhaver et al. 2021</a>)</span>. As the focal community’s discussion is subjected to debate, we expect that when the shielding effect takes place at the focal community, the neighbor community will experience an influx of harassment.</p>
+<p>After the shielding effect protect the focal community from the harassers, the harassers cannot participate in the discussion while they still have the need to speak up their. Thus, they have to move to other venuw that does not have such effective protections. We call this the <em>spillover effect</em>. We construct our formal hypothesis as below:</p>
+<p><em><strong>H3</strong>: After the implementation of the bot, communities with similar topics and without bot moderation (human-only moderated communities) will experience an increase in harassment.</em></p>
+</section>
+</section>
+<section id="empirical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="empirical-analysis">Empirical Analysis</h2>
+<section id="context" class="level3">
+<h3 class="anchored" data-anchor-id="context">Context</h3>
+<section id="reddit-and-its-moderation-policies" class="level4">
+<h4 class="anchored" data-anchor-id="reddit-and-its-moderation-policies">Reddit and its moderation policies</h4>
+<p>The context for this study is Reddit, a discussion website that hosts a variety of user-generated discussions, which is commonly known as subreddits <span class="citation" data-cites="intro-reddit">(<a href="#ref-intro-reddit" role="doc-biblioref">Wikipedia n.d.</a>)</span>. Reddit users can sign up to be a member of these communities. A user does not need to be a mem¬ber of a subreddit to contribute to the discussions; however, being a member may come with a range of benefits. A user may see new discussions from their user’s homepage without having to visit the subreddits of interest. Users can also sign up for notification of new discussions. Some subreddits even offer ranking of its users to boost user engage¬ment. Last but not least, being a member of the subreddit also offers a sense of belonging in online settings.</p>
+<p>These subreddits bear significant similarities with the traditionally studied communities in the Information Systems literature. For example, <span class="citation" data-cites="butler2001membership">(<a href="#ref-butler2001membership" role="doc-biblioref">Butler 2001</a>)</span> used listservs, email-based servers used to broadcast text messages to other members in the email lists. <span class="citation" data-cites="butler-et-wang-2012-cross-posting">(<a href="#ref-butler-et-wang-2012-cross-posting" role="doc-biblioref">Butler and Wang 2012</a>)</span> studies online communities by examining USENET newsgroups, which also supported thousands of commnuties of various topics. More recently, <span class="citation" data-cites="burtch2022peerawards">(<a href="#ref-burtch2022peerawards" role="doc-biblioref">Burtch et al. 2022</a>)</span> used Reddit as a context for online community research. Therefore, we will refer to these r/subreddits as communities to be consistent with the rest of the paper.</p>
+<p>There are many aspects to the operation of Reddit. In this project, we are looking in to its moderation in particular. Currently, Reddit employed a two-pronged approach to moderation on their platform. The first approach is at the platform level: the platform has all the rights to impose various measurements of moderation on subjected communities <span class="citation" data-cites="Redditban RedditQuarantin">(<a href="#ref-Redditban" role="doc-biblioref">Reddit 2022b</a>, <a href="#ref-RedditQuarantin" role="doc-biblioref">2022a</a>)</span>. The second approach is more decentralized. At the user level, the platform lets community moderators moderate users within the communities. These community moderators are Reddit users who volunteer for the job. Oftentimes, the community founders played a critical role in recruiting community moderators and guide the moderation policy within the community. Other fellow moderators could be other human users or bots. Either case, the moderators are assigned functions as listed in <a href="#fig-reddit-mod-function">Figure&nbsp;5</a>. In most of the cases, bot moderators are trusted with “Manage users” function, which allows the bots to prevent unwanted messages and users.</p>
+<div id="fig-reddit-mod-function" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Reddit_mod_function.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 5: Reddit’s Community Moderator’s Function.</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="the-bot-rsaferbot-and-the-community-rfemaledatingstrategy" class="level4">
+<h4 class="anchored" data-anchor-id="the-bot-rsaferbot-and-the-community-rfemaledatingstrategy">The bot, <em>r/saferbot</em> and the community, <em>r/femaledatingstrategy</em></h4>
+<p>The bot moderator in this study, <em>r/saferbot</em>, also focuses in managing users. Specifically, it uses blocking as a user moderation strategy to ban potentially unwanted users inf the user’s membership. The bot allows human moderators to create a list of communities whose members the human moderators would like to ban from. For example, r/stepparrents employed this bot to prevent users from other communities (e.g., r/real_parents and r/real_families) coming to r/stepparents to harass its members. We examine the bot’s effect on harassment within the focal communities, the ones who employed r/saferbot within a time frame of 30-day before and 30-day after the implementation of the bot.</p>
+<p>As we reasoned that the bot’s effect is most visible when the discussion topic is hotly debated among groups of contrasted characteristics,n in this case, we investigate the effect of the bot on misandry communities. Among many misandry communities on Reddit who also use this bot, r/femaledatingstrategy is the only one who does not close their community during the mentioned 61-day time frame. There are a number of reasons why a community may close during this 61-day time frame. Before the deployment of the anti-harassment bot, a community may have been severely targeted by unwanted out¬siders. After the deployment, the community moderators may need undisturbed time to adjust to the new situation. These events could prompt community’s moderators to close their communities (e.g., stop receiving new submissions and comments); thus, creating a situation where we cannot distinguish the effect of the bots and the moderator’s effect on mitigating harassment within the community. Therefore, we choose r/femaledatingstrategy as the focal community in this study and employ an event study approach to monitor the level of harassment in this community and its neighbors.</p>
+<p>In the table below, we summarise our concepts and our context.</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Concept</strong></th>
+<th><strong>Context</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Focal Communities</td>
+<td>r/femaledatingstrategy</td>
+</tr>
+<tr class="even">
+<td>Human-bot Moderation</td>
+<td>r/saferbot and human moderators of r/femaledatingstrategy</td>
+</tr>
+<tr class="odd">
+<td>Shielding Effect: <br>Ingroup</td>
+<td>r/femaledatingstrategy’s harassers</td>
+</tr>
+<tr class="even">
+<td>Shielding Effect: <br>Outgroup</td>
+<td>r/femaledatingstrategy</td>
+</tr>
+<tr class="odd">
+<td>Emboldening Effect:<br>Ingroup</td>
+<td>r/femaledatingstrategy</td>
+</tr>
+<tr class="even">
+<td>Emboldening Effect:<br>Outgroup</td>
+<td>Men</td>
+</tr>
+<tr class="odd">
+<td>Spillover Effect: <br>Neighbor Communities</td>
+<td>r/twoXChromosomes, r/WitchesVSPatriarchy, r/women</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data-collection-measurement-and-research-design" class="level4">
+<h4 class="anchored" data-anchor-id="data-collection-measurement-and-research-design">Data Collection, Measurement, and Research Design</h4>
+<p>The date of r/saferbot’s implementation was October 28, 2019. Thus, we observe r/femaledatingstrategy from September 29, 2019 to November 28, 2019. We collected 36,635 comments excluding comments removed by other bots and all moderators’ comments.</p>
+<p>For each of the comments, we assign <em>Toxicity scores</em>, <em>Identity Attack scores</em>, and <em>Insult scores</em>. These scores range from 0 to 1, which implies the probability of the comment being classified as toxic, identity attack or insult. We use pre-trained Detoxify, a BERT-based model, to classify whether a comment falls into these categories <span class="citation" data-cites="Detoxify">(<a href="#ref-Detoxify" role="doc-biblioref">Hanu and Unitary team 2020</a>)</span>. The most beneficial aspect of using Detoxify is that it inherits the classifiers from Perspective API, which is popular among platforms and researchers for detecting hate speech <span class="citation" data-cites="Detoxify">(<a href="#ref-Detoxify" role="doc-biblioref">Hanu and Unitary team 2020</a>)</span>. More importantly, Perspective API have been subjected to criti¬cisms that the algorithm is biased <span class="citation" data-cites="gehman2020realtoxicityprompts">(<a href="#ref-gehman2020realtoxicityprompts" role="doc-biblioref">Gehman et al. 2020</a>)</span> while Detoxify claims that their result scores are less biased <span class="citation" data-cites="Detoxify">(<a href="#ref-Detoxify" role="doc-biblioref">Hanu and Unitary team 2020</a>)</span>. We include a table of measurements for our data analysis below.</p>
+<p>Since only one community meet the requirements for our criteria, we choose to use event study approach to identify the bot’s effect on harassment levels. We monitor the level of harassment over the course of 30 days after the bot implementation. To address the lack of exact control for r/femaledatingstrategy, we employ a synthesis control approach to con¬struct an artificial counter factual. The synthetic control we use in this project is Bayesian Structure Time Series (BSTS), a method that is more well-known to estimate the impact of “discrete makret event such as a release of a new product, the introduction of a new feature, […]” <span class="citation" data-cites="brodersen2015BSTS">(<a href="#ref-brodersen2015BSTS" role="doc-biblioref">Brodersen et al. 2015</a>)</span>. In such cases, we do not have an alternative reality in which the new product or the new feature was not introduced in that market. Moreover, the market response to a product (e.g., in terms of revenue, positive analyst response, stock market price, etc.) is heavily influenced by the market response in the pre-treatment period. Last but not least, Bayesian approach also allows for prior knowledge that has been known (about previous launch, about company reputation, and about seasonal changes). Thus, it is sensible to employ a time series approach to account for such factors.</p>
+<p>In analyzing harassment in online communities, we see a strong potential of applying BSTS to the current context. <em>First</em>, as explained above, we have only one subject in the treated group and lack of control group. <em>Second</em>, the level of harassment at one point of time should be highly correlated with the previous level of harassment, which makes sense for a time series analysis. <em>Finally</em>, we do have some knowledge about the community we would like to incorporate into the model. At a very surface level, we know that comment patterns may follow a time cycle. Online activity tends to profiliate on Sunday, Wednesday, and Saturday. By the hours, Reddit traffic peaks at 11 PM EST <span class="citation" data-cites="reddit-best-time-to-vote">(<a href="#ref-reddit-best-time-to-vote" role="doc-biblioref">boostupvotes.com 2022</a>)</span>.</p>
+</section>
+</section>
+<section id="analysis" class="level3">
+<h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
+<section id="descriptive-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="descriptive-statistics">Descriptive Statistics</h4>
+<table class="table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Criteria</strong></th>
+<th><strong>61-day Period</strong></th>
+<th><strong>Before</strong></th>
+<th><strong>After</strong></th>
+<th><strong>t-test</strong><br>(p-value)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Toxicity</td>
+<td><span class="math inline">\(0.253\)</span><br>(<span class="math inline">\(0.355\)</span>)</td>
+<td><span class="math inline">\(0.267\)</span><br>(<span class="math inline">\(0.363\)</span>)</td>
+<td><span class="math inline">\(0.243\)</span><br>(<span class="math inline">\(0.349\)</span>)</td>
+<td><span class="math inline">\(6.372\)</span><br>(<span class="math inline">\(1.8 \times 10^{-10}\)</span>)</td>
+</tr>
+<tr class="even">
+<td>Insult</td>
+<td><span class="math inline">\(0.091\)</span><br>(<span class="math inline">\(0.204\)</span>)</td>
+<td><span class="math inline">\(0.010\)</span><br>(<span class="math inline">\(0.217\)</span>)</td>
+<td><span class="math inline">\(0.084\)</span><br>(<span class="math inline">\(0.194\)</span>)</td>
+<td><span class="math inline">\(6.978\)</span><br>(<span class="math inline">\(3.049 \times 10^{-12}\)</span>)</td>
+</tr>
+<tr class="odd">
+<td>Identity Attack</td>
+<td><span class="math inline">\(0.012\)</span><br>(<span class="math inline">\(0.052\)</span>)</td>
+<td><span class="math inline">\(0.014\)</span><br>(<span class="math inline">\(0.059\)</span>)</td>
+<td><span class="math inline">\(0.010\)</span><br>(<span class="math inline">\(0.046\)</span>)</td>
+<td><span class="math inline">\(6.597\)</span><br>(<span class="math inline">\(4.270*10^{-11}\)</span>)</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="discussion-and-future-research" class="level2">
+<h2 class="anchored" data-anchor-id="discussion-and-future-research">Discussion and Future Research</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Ali2021" class="csl-entry" role="doc-biblioentry">
+Ali, Shiza, Mohammad Hammas Saeed, Esraa Aldreabi, Jeremy Blackburn, Emiliano De Cristofaro, Savvas Zannettou, and Gianluca Stringhini. 2021. <span>“Understanding the Effect of Deplatforming on Social Networks.”</span> In <em>13th <span>ACM</span> Web Science Conference 2021</em>. <span>ACM</span>. <a href="https://doi.org/10.1145/3447535.3462637">https://doi.org/10.1145/3447535.3462637</a>.
+</div>
+<div id="ref-august2020explain-like-iam-a-scientist" class="csl-entry" role="doc-biblioentry">
+August, Tal, Dallas Card, Gary Hsieh, Noah A Smith, and Katharina Reinecke. 2020. <span>“Explain Like i Am a Scientist: The Linguistic Barriers of Entry to r/Science.”</span> In <em>Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems</em>, 1–12.
+</div>
+<div id="ref-4chan-incels" class="csl-entry" role="doc-biblioentry">
+Beran, Dale. 2018. <span>“Who Are the <span>’Incels’</span> of 4chan, and Why Are They so Angry?”</span> <em>Psmag</em>. https://psmag.com/news/who-are-the-incels-of-4chan-and-why-are-they-so-angry.
+</div>
+<div id="ref-binns2017liketrainer" class="csl-entry" role="doc-biblioentry">
+Binns, Reuben, Michael Veale, Max Van Kleek, and Nigel Shadbolt. 2017. <span>“Like Trainer, Like Bot? Inheritance of Bias in Algorithmic Content Moderation.”</span> In <em>International Conference on Social Informatics</em>, 405–15. Springer.
+</div>
+<div id="ref-reddit-best-time-to-vote" class="csl-entry" role="doc-biblioentry">
+boostupvotes.com. 2022. <span>“When to Post to Reddit to Maximize Traffic and Upvotes 2022.”</span> https://boostupvotes.com/2022/04/21/post-reddit-maximize-exposure/.
+</div>
+<div id="ref-reddit-list-of-bots-most-popular" class="csl-entry" role="doc-biblioentry">
+BotWatch. 2021. <span>“Moderator Bot Growth Statistics Update - December 2021.”</span> https://www.reddit.com/r/botwatch/comments/rlz7iv/moderator_bot_growth_statistics_update_december/.
+</div>
+<div id="ref-brodersen2015BSTS" class="csl-entry" role="doc-biblioentry">
+Brodersen, Kay H, Fabian Gallusser, Jim Koehler, Nicolas Remy, and Steven L Scott. 2015. <span>“Inferring Causal Impact Using Bayesian Structural Time-Series Models.”</span> <em>The Annals of Applied Statistics</em>, 247–74.
+</div>
+<div id="ref-burtch2022peerawards" class="csl-entry" role="doc-biblioentry">
+Burtch, Gordon, Qinglai He, Yili Hong, and Dokyun Lee. 2022. <span>“How Do Peer Awards Motivate Creative Content? Experimental Evidence from Reddit.”</span> <em>Management Science</em> 68 (5): 3488–3506.
+</div>
+<div id="ref-butler2001membership" class="csl-entry" role="doc-biblioentry">
+Butler, Brian S. 2001. <span>“Membership Size, Communication Activity, and Sustainability: A Resource-Based Model of Online Social Structures.”</span> <em>Information Systems Research</em> 12 (4): 346–62.
+</div>
+<div id="ref-butler-et-wang-2012-cross-posting" class="csl-entry" role="doc-biblioentry">
+Butler, Brian S, and Xiaoqing Wang. 2012. <span>“The Cross-Purposes of Cross-Posting: Boundary Reshaping Behavior in Online Discussion Communities.”</span> <em>Information Systems Research</em> 23 (3-part-2): 993–1010.
+</div>
+<div id="ref-Zuckerberg-content-moderation-nuances" class="csl-entry" role="doc-biblioentry">
+Canales, Katie. <span>“Mark Zuckerberg Said Content Moderation Requires ’Nuances’ That Consider the Intent Behind a Post, but Also Highlighted Facebook’s Reliance on AI to Do That Job.”</span> <em>Business Insider</em>. <a href="https://www.businessinsider.com/zuckerberg-nuances-content-moderation-ai-misinformation-hearing-2021-3">https://www.businessinsider.com/zuckerberg-nuances-content-moderation-ai-misinformation-hearing-2021-3</a>.
+</div>
+<div id="ref-chandrasekharan2019crossmod" class="csl-entry" role="doc-biblioentry">
+Chandrasekharan, Eshwar, Chaitrali Gandhi, Matthew Wortley Mustelier, and Eric Gilbert. 2019. <span>“Crossmod: A Cross-Community Learning-Based System to Assist Reddit Moderators.”</span> <em>Proceedings of the ACM on Human-Computer Interaction</em> 3 (CSCW): 1–30.
+</div>
+<div id="ref-chandrasekharan2020quarantined" class="csl-entry" role="doc-biblioentry">
+Chandrasekharan, Eshwar, Shagun Jhaver, Amy Bruckman, and Eric Gilbert. 2020. <span>“Quarantined! Examining the Effects of a Community-Wide Moderation Intervention on Reddit.”</span> <em>arXiv Preprint arXiv:2009.11483</em>.
+</div>
+<div id="ref-Chandrasekharan2017" class="csl-entry" role="doc-biblioentry">
+Chandrasekharan, Eshwar, Umashanthi Pavalanathan, Anirudh Srinivasan, Adam Glynn, Jacob Eisenstein, and Eric Gilbert. 2017. <span>“You Can<span></span>t Stay Here.”</span> <em>Proceedings of the <span>ACM</span> on Human-Computer Interaction</em> 1 (<span>CSCW</span>): 1–22. <a href="https://doi.org/10.1145/3134666">https://doi.org/10.1145/3134666</a>.
+</div>
+<div id="ref-cloudfare-cancel-8chan" class="csl-entry" role="doc-biblioentry">
+Cloudfare. 2019. <span>“Terminating Service for 8Chan.”</span> https://blog.cloudflare.com/terminating-service-for-8chan/.
+</div>
+<div id="ref-diakopoulos2011newscomments" class="csl-entry" role="doc-biblioentry">
+Diakopoulos, Nicholas, and Mor Naaman. 2011. <span>“Towards Quality Discourse in Online News Comments.”</span> In <em>Proceedings of the ACM 2011 Conference on Computer Supported Cooperative Work</em>, 133–42.
+</div>
+<div id="ref-dinan2019-adversarial-attack" class="csl-entry" role="doc-biblioentry">
+Dinan, Emily, Samuel Humeau, Bharath Chintagunta, and Jason Weston. 2019. <span>“Build It Break It Fix It for Dialogue Safety: Robustness from Adversarial Human Attack.”</span> <em>arXiv Preprint arXiv:1908.06083</em>.
+</div>
+<div id="ref-dosono2019moderation-emotional-labor" class="csl-entry" role="doc-biblioentry">
+Dosono, Bryan, and Bryan Semaan. 2019. <span>“Moderation Practices as Emotional Labor in Sustaining Online Communities: The Case of AAPI Identity Work on Reddit.”</span> In <em>Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems</em>, 1–13.
+</div>
+<div id="ref-dovidio2002implicit" class="csl-entry" role="doc-biblioentry">
+Dovidio, John F, Kerry Kawakami, and Samuel L Gaertner. 2002. <span>“Implicit and Explicit Prejudice and Interracial Interaction.”</span> <em>Journal of Personality and Social Psychology</em> 82 (1): 62.
+</div>
+<div id="ref-pewconsequences" class="csl-entry" role="doc-biblioentry">
+Duggan, Maeve. 2021a. <span>“Part 4: The Aftermath of Online Harassment.”</span> <em>Pew Research Center</em>. <a href="https://www.pewresearch.org/internet/2014/10/22/part-4-the-aftermath-of-online-harassment/">https://www.pewresearch.org/internet/2014/10/22/part-4-the-aftermath-of-online-harassment/</a>.
+</div>
+<div id="ref-pewanonymity" class="csl-entry" role="doc-biblioentry">
+———. 2021b. <span>“The Broader Context of Online Harassment.”</span> <em>Pew Research Center</em>. <a href="https://www.pewresearch.org/internet/2017/07/11/the-broader-context-of-online-harassment/">https://www.pewresearch.org/internet/2017/07/11/the-broader-context-of-online-harassment/</a>.
+</div>
+<div id="ref-facebook-sent-human-mod-home" class="csl-entry" role="doc-biblioentry">
+Dwoskin, Elizabeth, and Nitasha Tiku. 2020. <span>“Facebook Sent Home Thousands of Human Moderators Due to the Coronavirus. Now the Algorithms Are in Charge.”</span> <em>Washington Post</em>. <a href="https://www.washingtonpost.com/technology/2020/03/23/facebook-moderators-coronavirus/">https://www.washingtonpost.com/technology/2020/03/23/facebook-moderators-coronavirus/</a>.
+</div>
+<div id="ref-garrett2009echo" class="csl-entry" role="doc-biblioentry">
+Garrett, R Kelly. 2009. <span>“Echo Chambers Online?: Politically Motivated Selective Exposure Among Internet News Users.”</span> <em>Journal of Computer-Mediated Communication</em> 14 (2): 265–85.
+</div>
+<div id="ref-gehman2020realtoxicityprompts" class="csl-entry" role="doc-biblioentry">
+Gehman, Samuel, Suchin Gururangan, Maarten Sap, Yejin Choi, and Noah A Smith. 2020. <span>“Realtoxicityprompts: Evaluating Neural Toxic Degeneration in Language Models.”</span> <em>arXiv Preprint arXiv:2009.11462</em>.
+</div>
+<div id="ref-facebook-ai-mod-suck" class="csl-entry" role="doc-biblioentry">
+Geigner, Timothy. 2021. <span>“Facebook AI Moderation Continues to Suck Because Moderation at Scale Is Impossible.”</span> <em>Tech Dirt</em>. <a href="https://www.techdirt.com/2021/10/20/facebook-ai-moderation-continues-to-suck-because-moderation-scale-is-impossible/">https://www.techdirt.com/2021/10/20/facebook-ai-moderation-continues-to-suck-because-moderation-scale-is-impossible/</a>.
+</div>
+<div id="ref-gillespie2018platform-and-content-moderation" class="csl-entry" role="doc-biblioentry">
+Gillespie, Tarleton. 2018. <em>Custodians of the Internet: Platforms, Content Moderation, and the Hidden Decisions That Shape Social Media</em>. Yale University Press.
+</div>
+<div id="ref-gillespie2020content" class="csl-entry" role="doc-biblioentry">
+———. 2020. <span>“Content Moderation, AI, and the Question of Scale.”</span> <em>Big Data &amp; Society</em> 7 (2): 2053951720943234.
+</div>
+<div id="ref-gorwa2020algorithmic" class="csl-entry" role="doc-biblioentry">
+Gorwa, Robert, Reuben Binns, and Christian Katzenbach. 2020. <span>“Algorithmic Content Moderation: Technical and Political Challenges in the Automation of Platform Governance.”</span> <em>Big Data &amp; Society</em> 7 (1): 2053951719897945.
+</div>
+<div id="ref-Detoxify" class="csl-entry" role="doc-biblioentry">
+Hanu, Laura, and Unitary team. 2020. <span>“Detoxify.”</span> Github. https://github.com/unitaryai/detoxify.
+</div>
+<div id="ref-jhaver2018content-removal" class="csl-entry" role="doc-biblioentry">
+Jhaver, Shagun, Darren Scott Appling, Eric Gilbert, and Amy Bruckman. 2018. <span>“Did You Suspect the Post Would Be Removed?”: User Reactions to Content Removals on Reddit.”</span> <em>Proceedings of the ACM on Human-Computer Interaction</em> 2.
+</div>
+<div id="ref-jhaver2019automod" class="csl-entry" role="doc-biblioentry">
+Jhaver, Shagun, Iris Birman, Eric Gilbert, and Amy Bruckman. 2019. <span>“Human-Machine Collaboration for Content Regulation: The Case of Reddit Automoderator.”</span> <em>ACM Transactions on Computer-Human Interaction (TOCHI)</em> 26 (5): 1–35.
+</div>
+<div id="ref-Jhaver2021deplatforming" class="csl-entry" role="doc-biblioentry">
+Jhaver, Shagun, Christian Boylston, Diyi Yang, and Amy Bruckman. 2021. <span>“Evaluating the Effectiveness of Deplatforming as a Moderation Strategy on Twitter.”</span> <em>Proceedings of the <span>ACM</span> on Human-Computer Interaction</em> 5 (<span>CSCW</span>2): 1–30. <a href="https://doi.org/10.1145/3479525">https://doi.org/10.1145/3479525</a>.
+</div>
+<div id="ref-jhaver2019content-removal" class="csl-entry" role="doc-biblioentry">
+Jhaver, Shagun, Amy Bruckman, and Eric Gilbert. 2019. <span>“Does Transparency in Moderation Really Matter? User Behavior After Content Removal Explanations on Reddit.”</span> <em>Proceedings of the ACM on Human-Computer Interaction</em> 3 (CSCW): 1–27.
+</div>
+<div id="ref-Jhaver2018blocklist" class="csl-entry" role="doc-biblioentry">
+Jhaver, Shagun, Sucheta Ghoshal, Amy Bruckman, and Eric Gilbert. 2018. <span>“Online Harassment and Content Moderation: The Case of Blocklists.”</span> <em>ACM Trans. Comput.-Hum. Interact.</em> 25 (2). <a href="https://doi.org/10.1145/3185593">https://doi.org/10.1145/3185593</a>.
+</div>
+<div id="ref-Jiang2019voice-based" class="csl-entry" role="doc-biblioentry">
+Jiang, Jialun Aaron, Charles Kiene, Skyler Middler, Jed R. Brubaker, and Casey Fiesler. 2019. <span>“Moderation Challenges in Voice-Based Online Communities on Discord.”</span> <em>Proceedings of the <span>ACM</span> on Human-Computer Interaction</em> 3 (<span>CSCW</span>): 1–23. <a href="https://doi.org/10.1145/3359157">https://doi.org/10.1145/3359157</a>.
+</div>
+<div id="ref-kawakami2017intergroup" class="csl-entry" role="doc-biblioentry">
+Kawakami, Kerry, David M Amodio, and Kurt Hugenberg. 2017. <span>“Intergroup Perception and Cognition: An Integrative Framework for Understanding the Causes and Consequences of Social Categorization.”</span> In <em>Advances in Experimental Social Psychology</em>, 55:1–80. Elsevier.
+</div>
+<div id="ref-kiene2020whousebot" class="csl-entry" role="doc-biblioentry">
+Kiene, Charles, and Benjamin Mako Hill. 2020. <span>“Who Uses Bots? A Statistical Analysis of Bot Usage in Moderation Teams.”</span> In <em>Extended Abstracts of the 2020 CHI Conference on Human Factors in Computing Systems</em>, 1–8.
+</div>
+<div id="ref-kiene2019modteam" class="csl-entry" role="doc-biblioentry">
+Kiene, Charles, Jialun Aaron Jiang, and Benjamin Mako Hill. 2019. <span>“Technological Frames and User Innovation: Exploring Technological Change in Community Moderation Teams.”</span> <em>Proceedings of the ACM on Human-Computer Interaction</em> 3 (CSCW): 1–23.
+</div>
+<div id="ref-youtube-sent-human-mod-home-increase-removals" class="csl-entry" role="doc-biblioentry">
+Lapowsky, Isse. 2020. <span>“After Sending Content Moderators Home, YouTube Doubled Its Video Removals.”</span> <em>Protocol</em>. <a href="https://www.protocol.com/youtube-content-moderation-covid-19">https://www.protocol.com/youtube-content-moderation-covid-19</a>.
+</div>
+<div id="ref-elpaso-shooting-8chan" class="csl-entry" role="doc-biblioentry">
+Mezzofiore, Gianluca, and Donie OŚullivan. 2021. <span>“Part 4: The Aftermath of Online Harassment.”</span> https://www.cnn.com/2019/08/04/business/el-paso-shooting-8chan-biz.
+</div>
+<div id="ref-twitter-ai-moderation" class="csl-entry" role="doc-biblioentry">
+Newcomb, Allysa. 2019. <span>“Twitter Says a.i. Is Now Removing over Half of Its Abusive Tweets Before They’re Flagged.”</span> https://fortune.com/2019/10/24/twitter-abuse-tweets/.
+</div>
+<div id="ref-dayton-mass-shooting-8chan" class="csl-entry" role="doc-biblioentry">
+Paul P. Murphy, Drew Griffin, Konstantin Toropin, and Eric Levenson. 2019. <span>“Dayton Shooter Had an Obsession with Violence and Mass Shootings, Police Say.”</span> https://www.theguardian.com/technology/2019/aug/04/mass-shootings-el-paso-texas-dayton-ohio-8chan-far-right-website.
+</div>
+<div id="ref-perspective-api-6-types" class="csl-entry" role="doc-biblioentry">
+PerspectiveAPI. 2022. <span>“Https://Developers.perspectiveapi.com/s/about-the-Api-Attributes-and-Languages.”</span> Attributes &amp; Languages.
+</div>
+<div id="ref-pettigrew1995subtle" class="csl-entry" role="doc-biblioentry">
+Pettigrew, Thomas F, and Roel W Meertens. 1995. <span>“Subtle and Blatant Prejudice in Western Europe.”</span> <em>European Journal of Social Psychology</em> 25 (1): 57–75.
+</div>
+<div id="ref-Rauchfleisch2021" class="csl-entry" role="doc-biblioentry">
+Rauchfleisch, Adrian, and Jonas Kaiser. 2021. <span>“Deplatforming the Far-Right: An Analysis of <span>YouTube</span> and <span>BitChute</span>.”</span> <em><span>SSRN</span> Electronic Journal</em>. <a href="https://doi.org/10.2139/ssrn.3867818">https://doi.org/10.2139/ssrn.3867818</a>.
+</div>
+<div id="ref-RedditQuarantin" class="csl-entry" role="doc-biblioentry">
+Reddit. 2022a. <span>“Quarantined Subreddits.”</span> https://reddit.zendesk.com/hc/en-us/articles/360043069012-Quarantined-Subreddits.
+</div>
+<div id="ref-Redditban" class="csl-entry" role="doc-biblioentry">
+———. 2022b. <span>“Reddit Content Policy.”</span> https://www.redditinc.com/policies/content-policy.
+</div>
+<div id="ref-newzealand-shooting-8chan" class="csl-entry" role="doc-biblioentry">
+Regan, Helen, and Sandi Sidhu. 2019. <span>“49 Killed in Mass Shooting at Two Mosques in Christchurch, New Zealand.”</span>
+</div>
+<div id="ref-voxility-cancel-8chan" class="csl-entry" role="doc-biblioentry">
+Robertson, Adi. 2019. <span>“8chan Goes Dark After Hardware Provider Discontinues Service.”</span> https://www.theverge.com/2019/8/5/20754943/8chan-epik-offline-voxility-service-cutoff-hate-speech-ban.
+</div>
+<div id="ref-facebook-ai-moderation" class="csl-entry" role="doc-biblioentry">
+Schroepfer, Mike. 2021. <span>“Update on Our Progress on AI and Hate Speech Detection.”</span> <a href="https://about.fb.com/news/2021/02/update-on-our-progress-on-ai-and-hate-speech-detection/">https://about.fb.com/news/2021/02/update-on-our-progress-on-ai-and-hate-speech-detection/</a>.
+</div>
+<div id="ref-seering2018socialbot" class="csl-entry" role="doc-biblioentry">
+Seering, Joseph, Juan Pablo Flores, Saiph Savage, and Jessica Hammer. 2018. <span>“The Social Roles of Bots: Evaluating Impact of Bots on Discussions in Online Communities.”</span> <em>Proceedings of the ACM on Human-Computer Interaction</em> 2 (CSCW): 1–29.
+</div>
+<div id="ref-tiktok-human-moderator-stress" class="csl-entry" role="doc-biblioentry">
+Snyder, Kristen. 2020. <span>“TikTok Content Moderators Allege Emotional Distress.”</span> <a href="https://dot.la/tiktok-content-moderators-2657593810.html">https://dot.la/tiktok-content-moderators-2657593810.html</a>.
+</div>
+<div id="ref-srinivasan2019content-removal" class="csl-entry" role="doc-biblioentry">
+Srinivasan, Kumar Bhargav, Cristian Danescu-Niculescu-Mizil, Lillian Lee, and Chenhao Tan. 2019. <span>“Content Removal as a Moderation Strategy: Compliance and Other Outcomes in the Changemyview Community.”</span> <em>Proceedings of the ACM on Human-Computer Interaction</em> 3 (CSCW): 1–21.
+</div>
+<div id="ref-facebook-youtube-corona-crisis-criticism" class="csl-entry" role="doc-biblioentry">
+Stokel-Walker, Chris. 2020. <span>“As Humans Go Home, Facebook and YouTube Face a Coronavirus Crisis.”</span> <em>WIRED</em>. <a href="https://www.wired.co.uk/article/coronavirus-facts-moderators-facebook-youtube">https://www.wired.co.uk/article/coronavirus-facts-moderators-facebook-youtube</a>.
+</div>
+<div id="ref-sunstein2009" class="csl-entry" role="doc-biblioentry">
+Sunstein, Cass R. 2009. <em>Going to Extremes: How Like Minds Unite and Divide</em>. Oxford University Press.
+</div>
+<div id="ref-trujillo2021community-language-post-ban" class="csl-entry" role="doc-biblioentry">
+Trujillo, Milo Z, Samuel F Rosenblatt, Guillermo de Anda Jáuregui, Emily Moog, Briane Paul V Samson, Laurent Hébert-Dufresne, and Allison M Roth. 2021. <span>“When the Echo Chamber Shatters: Examining the Use of Community-Specific Language Post-Subreddit Ban.”</span> <em>arXiv Preprint arXiv:2106.16207</em>.
+</div>
+<div id="ref-TwitterContent" class="csl-entry" role="doc-biblioentry">
+Twitter. 2020. <span>“Our Range of Enforcement Options.”</span> <a href="https://help.twitter.com/en/rules-and-policies/enforcement-options">https://help.twitter.com/en/rules-and-policies/enforcement-options</a>.
+</div>
+<div id="ref-pewstateofharassment" class="csl-entry" role="doc-biblioentry">
+Vogels, Emily. 2021. <span>“The State of Online Harassment.”</span> <em>Pew Research Center</em>. <a href="https://www.pewresearch.org/internet/2021/01/13/the-state-of-online-harassment/">https://www.pewresearch.org/internet/2021/01/13/the-state-of-online-harassment/</a>.
+</div>
+<div id="ref-8chanonwiki" class="csl-entry" role="doc-biblioentry">
+Wikipedia. n.d. <span>“8chan,”</span> n.d.
+</div>
+<div id="ref-intro-reddit" class="csl-entry" role="doc-biblioentry">
+———. n.d. <span>“Reddit.”</span> https://en.wikipedia.org/wiki/Reddit.
+</div>
+<div id="ref-wikicluengbot" class="csl-entry" role="doc-biblioentry">
+———. 2021a. <span>“User:ClueBot NG.”</span> <em>Wikipedia</em>. <a href="https://en.wikipedia.org/wiki/User:ClueBot_NG">https://en.wikipedia.org/wiki/User:ClueBot_NG</a>.
+</div>
+<div id="ref-pageofwiki" class="csl-entry" role="doc-biblioentry">
+———. 2021b. <span>“Wikipedia Is Not a Forum.”</span> <em>Reddit</em>. <a href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_is_not_a_forum">https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_is_not_a_forum</a>.
+</div>
+<div id="ref-wu2022surveyofHITL" class="csl-entry" role="doc-biblioentry">
+Wu, Xingjiao, Luwei Xiao, Yixuan Sun, Junhang Zhang, Tianlong Ma, and Liang He. 2022. <span>“A Survey of Human-in-the-Loop for Machine Learning.”</span> <em>Future Generation Computer Systems</em>.
+</div>
+<div id="ref-discord-list-of-bots" class="csl-entry" role="doc-biblioentry">
+www.top.gg. 2022. <span>“List of Discord Moderation Bots.”</span> https://top.gg/search?q=moderation.
+</div>
+<div id="ref-Yang2019AIST" class="csl-entry" role="doc-biblioentry">
+Yang, Yukun. 2019. <span>“When Power Goes Wild Online: How Did a Voluntary Moderator’s Abuse of Power Affect an Online Community?”</span> <em>Proceedings of the Association for Information Science and Technology</em> 56.
+</div>
+</div>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1" role="doc-endnote"><p>Georgia State University, anguyen192@gsu.edu<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Georgia State University, arunrai@gsu.edu<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Georgia State University, lmaruping@gsu.edu<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>Georgia State University, anguyen192@gsu.edu<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>Georgia State University, arunrai@gsu.edu<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Georgia State University, lmaruping@gsu.edu<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>Georgia State University, anguyen192@gsu.edu<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>Georgia State University, arunrai@gsu.edu<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>Georgia State University, lmaruping@gsu.edu<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

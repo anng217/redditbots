@@ -29,6 +29,8 @@ library(knitr)
 library(broom)
 library(purrr)
 library(psych)
+library(lubridate)
+
 
 #fds <- read.csv("E:/gihub-data/redditbots/fds/fds_res.csv")
 ```
@@ -36,7 +38,6 @@ library(psych)
 ```{r import function, echo = F, output = F}
 source("redditbots_function.R")
 ```
-
 
 ```{r cleaning, echo = FALSE, output = FALSE}
 fds <- read.csv("E:/gihub-data/redditbots/fds/fds_res.csv")
@@ -46,8 +47,6 @@ fds <-fds %>%
 
 fds <- add_relDate(fds, day_zero = "2019-10-28")
 ```
-
-
 
 ```{r descriptive-by-date, echo = FALSE, results = FALSE}
 as.data.frame(
@@ -315,6 +314,7 @@ library(synthdid)
 ```
 
 ## Synthetic Control DiD (1)
+
 ```{r clean-data-for-BSTS-and-gsynth, echo = F, results = F, warning = FALSE}
 # Load and clean
 fds_bsts <- agg_data("E:/gihub-data/redditbots/fds/fds_res.csv",
@@ -444,6 +444,7 @@ summary(mod)
 ```
 
 ## Synthetic Control DiD {.smaller}
+
 ```{r plotting-synthetic-did, echo = F, results = F}
 plot(mod, se.method='placebo')
 ```
