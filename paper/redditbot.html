@@ -319,7 +319,9 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
 <section id="descriptive-statistics" class="level4">
 <h4 class="anchored" data-anchor-id="descriptive-statistics">Descriptive Statistics</h4>
+<div id="tbl-descriptive-stats-before-after" class="anchored">
 <table class="table">
+<caption>Table 2: Descriptive Statistics Before and After Human-bot Moderation</caption>
 <colgroup>
 <col style="width: 20%">
 <col style="width: 20%">
@@ -357,6 +359,216 @@ div.csl-indent {
 <td><span class="math inline">\(0.014\)</span><br>(<span class="math inline">\(0.059\)</span>)</td>
 <td><span class="math inline">\(0.010\)</span><br>(<span class="math inline">\(0.046\)</span>)</td>
 <td><span class="math inline">\(6.597\)</span><br>(<span class="math inline">\(4.270*10^{-11}\)</span>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tbl-corellation-all" class="anchored">
+<table class="table">
+<caption>Table 3: Correlation among the three scores</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Toxicity</strong></th>
+<th><strong>Identity Attack</strong></th>
+<th><strong>Insult</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Toxicity</strong></td>
+<td>1.00</td>
+<td>0.38</td>
+<td>0.91</td>
+</tr>
+<tr class="even">
+<td><strong>Identity Attack</strong></td>
+<td>0.38</td>
+<td>1.00</td>
+<td>0.40</td>
+</tr>
+<tr class="odd">
+<td><strong>Insult</strong></td>
+<td>0.91</td>
+<td>0.40</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tbl-correlation" class="tbl-parent quarto-layout-panel anchored">
+<div class="panel-caption table-caption">
+<p>Table 4: Correlation among the three scores</p>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="tbl-corellation-before" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-correlation" style="flex-basis: 50.0%;justify-content: center;">
+<table class="table">
+<caption>(a) Before human-bot moderation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Toxicity</strong></th>
+<th style="text-align: left;"><strong>Identity Attack</strong></th>
+<th style="text-align: left;"><strong>Insult</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Toxicity</strong></td>
+<td style="text-align: left;">1.000</td>
+<td style="text-align: left;">0.367</td>
+<td style="text-align: left;">0.937</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Identity Attack</strong></td>
+<td style="text-align: left;">0.367</td>
+<td style="text-align: left;">1.000</td>
+<td style="text-align: left;">0.378</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Insult</strong></td>
+<td style="text-align: left;">0.937</td>
+<td style="text-align: left;">0.378</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tbl-corellation-after" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-correlation" style="flex-basis: 50.0%;justify-content: center;">
+<table class="table">
+<caption>(b) After human-bot moderation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Toxicity</strong></th>
+<th style="text-align: left;"><strong>Identity Attack</strong></th>
+<th style="text-align: left;"><strong>Insult</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Toxicity</strong></td>
+<td style="text-align: left;">1.000</td>
+<td style="text-align: left;">0.266</td>
+<td style="text-align: left;">0.848</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Identity Attack</strong></td>
+<td style="text-align: left;">0.266</td>
+<td style="text-align: left;">1.000</td>
+<td style="text-align: left;">0.324</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Insult</strong></td>
+<td style="text-align: left;">0.848</td>
+<td style="text-align: left;">0.324</td>
+<td style="text-align: left;">1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tbl-corellation-after" class="anchored">
+<table class="table">
+<caption>Table 5: Correlation among the three scores after human-bot moderation</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Toxicity</strong></th>
+<th><strong>Identity Attack</strong></th>
+<th><strong>Insult</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Toxicity</strong></td>
+<td>1.000</td>
+<td>0.266</td>
+<td>0.848</td>
+</tr>
+<tr class="even">
+<td><strong>Identity Attack</strong></td>
+<td>0.266</td>
+<td>1.000</td>
+<td>0.324</td>
+</tr>
+<tr class="odd">
+<td><strong>Insult</strong></td>
+<td>0.848</td>
+<td>0.324</td>
+<td>1.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="regression-discontinuity-in-focal-community" class="level4">
+<h4 class="anchored" data-anchor-id="regression-discontinuity-in-focal-community">Regression Discontinuity in focal community</h4>
+<div id="fig-discont-toxic" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="discont_toxic.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 6: Discontinuity in Toxicity.</figcaption><p></p>
+</figure>
+</div>
+<div id="fig-discont-ia" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="discont_ia.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 7: Discontinuity in Identity Attack.</figcaption><p></p>
+</figure>
+</div>
+<div id="fig-discont-insult" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="discont_insult.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure 8: Discontinuity in Insult.</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="synthetic-control---bayesian-structural-times-series" class="level4">
+<h4 class="anchored" data-anchor-id="synthetic-control---bayesian-structural-times-series">Synthetic Control - Bayesian Structural Times Series</h4>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 27%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>95% Confidence <br>Interval</th>
+<th>Posterior <br>Prob. Of <br>Causal Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Insult - Score Mean</td>
+<td>[-0.035, 0.0068]</td>
+<td>94%</td>
+</tr>
+<tr class="even">
+<td>Insult - Log Score Mean</td>
+<td>[-0.29, 0.0069]</td>
+<td>96.774%</td>
+</tr>
+<tr class="odd">
+<td>Insult - Percentage</td>
+<td>[-0.049, 0.034]</td>
+<td>88%</td>
+</tr>
+<tr class="even">
+<td>Identity Attack - Score Mean</td>
+<td>[-0.011, -0.0016]</td>
+<td>99.90%</td>
+</tr>
+<tr class="odd">
+<td>Identity Attack - Log Score Mean</td>
+<td>[-0.82, -0.073]</td>
+<td>99.78%</td>
+</tr>
+<tr class="even">
+<td>Identity Attack - Percentage</td>
+<td>[-0.049, 0.035]</td>
+<td>82%</td>
 </tr>
 </tbody>
 </table>

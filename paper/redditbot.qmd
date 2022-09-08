@@ -204,14 +204,11 @@ In analyzing harassment in online communities, we see a strong potential of appl
 
 ### Analysis
 
-#### Descriptive Statistics
+#### Analysis for Shielding Effects
 
-| **Criteria** | **61-day Period** | **Before** | **After** | **t-test**<br>(p-value) |
-|---|---|---|---|---|
-| Toxicity | $0.253$<br>($0.355$) | $0.267$<br>($0.363$) | $0.243$<br>($0.349$) | $6.372$<br>($1.8 \times 10^{-10}$) |
-| Insult | $0.091$<br>($0.204$) | $0.010$<br>($0.217$) | $0.084$<br>($0.194$) | $6.978$<br>($3.049 \times 10^{-12}$) |
-| Identity Attack | $0.012$<br>($0.052$) |$0.014$<br>($0.059$) | $0.010$<br>($0.046$) | $6.597$<br>($4.270*10^{-11}$) |
-: Descriptive Statistics Before and After Human-bot Moderation {#tbl-descriptive-stats-before-after}
+#### Descriptive Statistics of focal community
+
+@tbl-corellation-all shows the correlation among the three score we are interested in during the 61-day period. Interestingly, toxicity highly correlates with Insult while Identity Attack do not havce such high correlation with either of the rest. We split the dataset into the before and after human-bot moderation period to see if the relationship changes. 
 
 |  | **Toxicity** | **Identity Attack** | **Insult** |
 |---|---|---|---|
@@ -220,24 +217,72 @@ In analyzing harassment in online communities, we see a strong potential of appl
 | **Insult** | 0.91 | 0.40 | 1.00 |
 : Correlation among the three scores {#tbl-corellation-all}
 
+@tbl-descriptive-stats-before-after shows that there is a slight decrease in correlation between Toxicity and Insult after the human-bot moderation; however, it does not significantly dropped. One possible explaination is that blocking at the source of harassment may work effectively against blaten acts of harassment that is classified as both toxic and insult.
+
+::: {#tbl-correlation-score layout-ncol=2}
 |  | **Toxicity** | **Identity Attack** | **Insult** |
 |---|---|---|---|
 | **Toxicity** | 1.000 | 0.367 | 0.937 |
 | **Identity Attack** | 0.367 | 1.000 | 0.378 |
 | **Insult** | 0.937 | 0.378 | 1.000 |
-: Correlation among the three scores before human-bot moderation {#tbl-corellation-before}
+
+: Before human-bot moderation {#tbl-corellation-before}
 
 |  | **Toxicity** | **Identity Attack** | **Insult** |
 |---|---|---|---|
 | **Toxicity** | 1.000 | 0.266 | 0.848 |
 | **Identity Attack** | 0.266 | 1.000 | 0.324 |
 | **Insult** | 0.848 | 0.324 | 1.000 |
-: Correlation among the three scores after human-bot moderation {#tbl-corellation-after}
 
-#### Regression Discontinuity
-##### Toxicity
+: After human-bot moderation {#tbl-corellation-after}
 
-![A snapshot of interface between human and rule-based bot on Reddit.](Reddit_mod_function.png){#fig-interface-human-bot-reddit}
+Correlation among the three scores before vs. after 
+:::
+
+We also did a preliminary analysis on to compare the mean of the scores before and after human-bot moderation to see if there is any significant differences in @tbl-descriptive-stats-before-after. The initial results show positive first evidence for our first hypothesis: the *shielding effect*.
+
+| **Criteria** | **61-day Period** | **Before** | **After** | **t-test**<br>(p-value) |
+|---|---|---|---|---|
+| Toxicity | $0.253$<br>($0.355$) | $0.267$<br>($0.363$) | $0.243$<br>($0.349$) | $6.372$<br>($1.8 \times 10^{-10}$) |
+| Insult | $0.091$<br>($0.204$) | $0.010$<br>($0.217$) | $0.084$<br>($0.194$) | $6.978$<br>($3.049 \times 10^{-12}$) |
+| Identity Attack | $0.012$<br>($0.052$) |$0.014$<br>($0.059$) | $0.010$<br>($0.046$) | $6.597$<br>($4.270*10^{-11}$) |
+: Scores Before and After Human-bot Moderation {#tbl-descriptive-stats-before-after}
+
+#### Discontinuity in Focal Community
+
+To further investigate the shielding effect, we also investigate the local effect of the human-bot moderation on the three scores. @fig-discont-toxic, @fig-discont-ia, @fig-discont-insult show the local discontinuity of Toxicity, Identity Attack, and Insult 15 days before and 15 days after the implementation of human-mod moderation.
+
+![Discontinuity in Toxicity.](discont_toxic.png){#fig-discont-toxic}
+
+![Discontinuity in Identity Attack.](discont_ia.png){#fig-discont-ia}
+
+![Discontinuity in Insult.](discont_insult.png){#fig-discont-insult}
+
+Although our first hypothesis, the human-bot moderation's shelding mechanism has a local average treatment effect on the three scores, we would like to investigate the treatment effect with BSTS, that is how the harassment in the focal commmunity behave in a longer run.
+
+#### Synthetic Control - Bayesian Structural Times Series
+We establish causality by constructing synthetic control to our focal community, r/femaledatingstrategy, that is how our focal community would have been had they not implemented human-bot moderation to combat harassment. We use similar topic communities' score, opposite-topic communities' score to construct the synthetic control. Our similar communities are r/feminism, r/TwoXChromosomes, and r/trollXchromosomes and the opposite-topic communities are r/TheRedPill and r/mgtow.
+
+|                                  | 95% Confidence <br>Interval | Posterior <br>Prob. Of <br>Causal Effect |
+|------------------------|--------------------|----------------------------|
+| Insult - Score Mean              | \[-0.035, 0.0068\]          | 94%                                      |
+| Insult - Log Score Mean          | \[-0.29, 0.0069\]           | 96.774%                                  |
+| Insult - Percentage              | \[-0.049, 0.034\]           | 88%                                      |
+| Identity Attack - Score Mean     | \[-0.011, -0.0016\]         | 99.90%                                   |
+| Identity Attack - Log Score Mean | \[-0.82, -0.073\]           | 99.78%                                   |
+| Identity Attack - Percentage     | \[-0.049, 0.035\]           | 82%                                      |
+: BSTS results {#tbl-bsts-results}
+
+Although the intial results show positive effects [@tbl-bsts-results], the quality of controls are not excellent judging from the constructed control in the before period does not perfectly fit with the true data. In @fig-bsts-graphs, we can clearly see that the dash lines and the solid linesof the 'orignial' panels do not line up well with one another. This means that the constructed synthetic unit does not have the same level of scores the focal community has. Thus, this make causal inference prone to invalidity.
+
+::: {#fig-bsts-graphs layout-ncol=1}
+
+![Score](insult_score.png){#fig-bsts-ia-score}
+
+![Log Score](ia_lnscore.png){#fig-bsts-ia-lnscore}
+
+Synthetic Control with BSTS on Identity Attack
+:::
 
 ## Discussion and Future Research
 
