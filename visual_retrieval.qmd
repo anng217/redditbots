@@ -210,13 +210,11 @@ Track users who posted toxic/identity attack/insults/controversial comments:
 
 ## Aug 24:
 
--  Introducing Rewards
+-   Introducing Rewards
 
-- Progress with neighbor communities and synthetic controls
+-   Progress with neighbor communities and synthetic controls
 
 ## Progress with synthetic controls
-
-
 
 ## Reference
 

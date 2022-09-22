@@ -53,44 +53,41 @@ as.data.frame(
   fds %>% group_by(created_date) %>%
   summarise(m_toxicity = round(mean(toxicity),2),
             m_identity_attack = round(mean(identity_attack),2),
-            m_insult = round(mean(insult),2),
-            p_toxicity = round(mean(toxicity_flag),2),
-            p_identity_attack = round(mean(identity_attack_flag),2),
-            p_insult = round(mean(insult_flag),2)))
+            m_insult = round(mean(insult),2)))
 ```
 
 ```{r desc-stats1, echo = FALSE}
 kable(round(
   describe(fds[c("post", "toxicity", "severe_toxicity", "obscene", 
                  "threat", "insult", "identity_attack")]) %>% 
-  dplyr::select(n, mean, sd, median),2)) %>%
-  kable_material(c("hover"))
+  dplyr::select(n, mean, sd, median),3))
 ```
 
 ## Descriptive Statistics (2) {.smaller}
 
 ```{r desc-stats2, echo = FALSE}
+fds <- fds %>%
+  mutate(toxicity_f = ifelse(toxicity > 0.25,1,0),
+              identity_attack_f = ifelse(identity_attack > 0.09,1,0),
+              insult_f = ifelse(insult > 0.012, 1, 0))
 kable(round(
-  describe(fds[c("post", "toxicity_flag", "severe_toxicity_flag", "obscene_flag", 
-                 "threat_flag", "insult_flag", "identity_attack_flag")]) %>% 
-  dplyr::select(n, mean, sd, min, max),2))%>%
-  kable_material(c("hover"))
+  describe(fds[c("post", "toxicity_f", "insult_f", "identity_attack_f")]) %>% 
+  dplyr::select(n, mean, sd, min, max),3))
 ```
 
 ## Descriptive Statistics (3) {.smaller}
 
 ```{r compare-post-pre-fds, echo = F, results = T}
 compare_means <- t(fds %>% group_by(post)%>%
-                            summarise(Toxicity = mean(toxicity),
-                                   Severe_Toxicity = mean(severe_toxicity),
-                                   Obscene = mean(obscene),
-                                   Threat = mean(threat),
-                                   Insult = mean(insult),
-                                   Identity_attack = mean(identity_attack)))
+                            summarise(Toxicity = sd(toxicity),
+                                   Severe_Toxicity = sd(severe_toxicity),
+                                   Obscene = sd(obscene),
+                                   Threat = sd(threat),
+                                   Insult = sd(insult),
+                                   Identity_attack = sd(identity_attack)))
 colnames(compare_means) <- c("Pre", "Post")
 
-kable(compare_means[-1,]) %>%
-  kable_material("hover")
+kable(compare_means[-1,])
 ```
 
 ## Descriptive Statistics (4) {.smaller}
@@ -110,21 +107,18 @@ tab <- as.data.frame(map_df(list(t.toxicity, t.insult, t.identity_attack),tidy))
 
 row.names(tab) <- c("Toxicity", "Insult", "Identity Attack")
 
-tab[c("estimate", "statistic", "p.value", "conf.low", "conf.high")] %>%
-  mutate_if(is.numeric,round, 5) %>%
-  kable() %>%
-  kable_material(c("hover"))
+tab[c("estimate", "statistic", "p.value", "conf.low", "conf.high")]
 ```
 
 ## Correlation Matrix (1) {.smaller .scrollable}
 
 ```{r}
 kable(round(cor(fds %>% group_by(created_date) %>%
+                  filter(post == 1) %>%
   summarise(m_toxicity = round(mean(toxicity),2),
             m_identity_attack = round(mean(identity_attack),2),
             m_insult = round(mean(insult),2)) %>%
-  dplyr::select(-created_date)),2))%>%
-  kable_material(c("hover"))
+  dplyr::select(-created_date)),3))
 ```
 
 ## Correlation Matrix (2) {.smaller .scrollable}
@@ -161,9 +155,9 @@ fds %>% group_by(created_date) %>%
   guides(color = FALSE) +
   geom_vline(xintercept = -0.5, color = "red",
              size = 1, linetype = "dashed") +
-  labs(y = "Toxicity Comments Percentage",
+  labs(y = "Toxicity Comments",
        x = "Days Since Treatment",
-       title ="Discontinuity in Percentage of Toxicity") + 
+       title ="Discontinuity in Toxicity") + 
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.background = element_blank(),
@@ -655,8 +649,7 @@ kable(
             obscene = mean(obscene),
             threat = mean(threat),
             severe_toxicity = mean(severe_toxicity))%>%
-    dplyr::select(-created_date)),2)) %>%
-  kable_material("hover")
+    dplyr::select(-created_date)),2))
 ```
 
 ## Appendix 1: Corellation Matrix of all vars (2) {.smaller}

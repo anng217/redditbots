@@ -25,18 +25,16 @@ def detox_loop(df,model):
         i = i + 100
     return df_res
 
-def detox_body(df,model):
+def flaten(df):
     df=list(df['body'].values.flatten())
-    res = detox_loop(df=df,model=model)
-    return res
+    return df
 
-def detox(source_dir,model, save_dir= None):
-    #keeping separate pre-post list
-    df = pd.read_csv(source_dir)
-    body_res = detox_body(df, model)
-    res = pd.concat([df.reset_index(drop=True),body_res.reset_index(drop=True)], axis = 1)
-    if save_dir != None:
-        res.to_csv(save_dir, encoding = 'utf-8-sig')
+def detox_df(df,model, save_dir):
+    flaten_df = flaten(df=df)
+    detox_df = detox_loop(df=flaten_df,model=model)
+    res = pd.concat([detox_df.reset_index(drop=True),detox_df.reset_index(drop=True)], axis = 1)
+    if save_dir != False:
+        res.to_csv(save_dir,encoding = 'utf-8-sig')
     return res
 
 # praw enhancement
@@ -147,9 +145,13 @@ def author_comments(df, bot_epoch, duration, limit = 10000000000, enhance = True
         print('Time elapsed: ', round(time.time() - tic),' secs, i = ',i)
     return pd.concat(res_df)
 
+def get_epoch(bot_epoch, duration):
+    before = int((dt.datetime.fromtimestamp(bot_epoch)+dt.timedelta(days = duration)).timestamp())
+    after = int((dt.datetime.fromtimestamp(bot_epoch)-dt.timedelta(days = duration)).timestamp())
+    return before, after
 
 def within60days(df, bot_epoch, duration):
-    before, after = get_epochdate(bot_epoch = bot_epoch, duration = duration)
+    before, after = get_epoch(bot_epoch = bot_epoch, duration = duration)
     res = df.loc[(df['created_utc'] >= after) & (df['created_utc'] <= before)]
     return res
 
