@@ -23,6 +23,7 @@ library(CausalImpact)
 # Working directory
 setwd("E:/github-data/redditbots")
 getwd()
+source("redditbots_function.R")
 
 # Function ----
 ## Function: Take subscriber info

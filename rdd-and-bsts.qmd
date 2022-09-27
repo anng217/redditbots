@@ -17,7 +17,7 @@ editor: visual
 ## Focal Community Descriptive Statistics (1) {.smaller}
 
 ```{r routine, echo=FALSE, output = FALSE}
-rm(list = ls())
+#rm(list = ls())
 
 library(tidyverse)
 library(dplyr)
@@ -325,21 +325,36 @@ mgtow_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/mgtow_res.csv",
                     ia_thresh = 0.016, insult_thresh = 0.095, toxic_thresh = 0.245)
 trp_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/TheRedPill_res.csv",
                   ia_thresh = 0.016, insult_thresh = 0.105, toxic_thresh = 0.271)
+#Added Sep 21
+#aita_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/AITA_res.csv",
+#                  ia_thresh = 0.5, insult_thresh = 0.5, toxic_thresh = 0.5)
+askreddit_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/askreddit_res.csv",
+                  ia_thresh = 0.5, insult_thresh = 0.5, toxic_thresh = 0.5)
+gender_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/gendercritical_res.csv",
+                  ia_thresh = 0.5, insult_thresh = 0.5, toxic_thresh = 0.5)
+#relationship_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/relationshipadvice_res.csv",
+#                  ia_thresh = 0.5, insult_thresh = 0.5, toxic_thresh = 0.5)
+#unpopular_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/unpopularopinion_res.csv",
+#                  ia_thresh = 0.5, insult_thresh = 0.5, toxic_thresh = 0.5)
+purple_bsts <- agg_data("E:/gihub-data/redditbots/control-fds/purple_test1.csv",
+                  ia_thresh = 0.5, insult_thresh = 0.5, toxic_thresh = 0.5)
 
 # Add pre, post
 fds_bsts <- add_relDate(fds_bsts, day_zero = "2019-10-28")
-
 fm_bsts <- add_relDate(fm_bsts, day_zero = "2019-10-28")
-
 twoX_bsts <- add_relDate(twoX_bsts, day_zero = "2019-10-28")
-
 wvsp_bsts <- add_relDate(wvsp_bsts, day_zero = "2019-10-28")
-
 trollX_bsts <- add_relDate(trollX_bsts, day_zero = "2019-10-28")
-
 mgtow_bsts <- add_relDate(mgtow_bsts, day_zero = "2019-10-28")
-
 trp_bsts <- add_relDate(trp_bsts, day_zero = "2019-10-28")
+#Added Sep 21
+#aita_bsts <- add_relDate(aita_bsts, day_zero = "2019-10-28")
+askreddit_bsts <- add_relDate(askreddit_bsts, day_zero = "2019-10-28")
+gender_bsts <- add_relDate(gender_bsts, day_zero = "2019-10-28")
+#relationship_bsts <- add_relDate(relationship_bsts, day_zero = "2019-10-28")
+#unpopular_bsts <- add_relDate(unpopular_bsts, day_zero = "2019-10-28")
+purple_bsts <- add_relDate(purple_bsts, day_zero = "2019-10-28")
+
 
 # Take subscribers ----
 fds_subsc <- subscriber_num(
@@ -370,6 +385,30 @@ mgtow_subsc <- subscriber_num(
   source_dir = "E:/gihub-data/redditbots/control-fds/mgtow_subsc.csv",
   from_date = "2019-09-28", to_date = "2019-11-27")
 
+#Added Sep 21
+#aita_subsc <- subscriber_num(
+#  source_dir = "E:/gihub-data/redditbots/control-fds/AITA_subsc.csv",
+#  from_date = "2019-09-28", to_date = "2019-11-27")
+
+askreddit_subsc <- subscriber_num(
+  source_dir = "E:/gihub-data/redditbots/control-fds/askreddit_subsc.csv",
+  from_date = "2019-09-28", to_date = "2019-11-27")
+
+gender_bsts <- subscriber_num(
+  source_dir = "E:/gihub-data/redditbots/control-fds/gendercritical_subsc.csv",
+  from_date = "2019-09-28", to_date = "2019-11-27")
+
+#relationship_subsc <- subscriber_num(
+#  source_dir = "E:/gihub-data/redditbots/control-fds/relationshipadvice_subsc.csv",
+#  from_date = "2019-09-28", to_date = "2019-11-27")
+
+#unpopular_subsc <- subscriber_num(
+#  source_dir = "E:/gihub-data/redditbots/control-fds/unpopularopinion_subsc.csv",
+#  from_date = "2019-09-28", to_date = "2019-11-27")
+
+purple_subsc <- subscriber_num(
+  source_dir = "E:/gihub-data/redditbots/control-fds/purple_subsc.csv",
+  from_date = "2019-09-28", to_date = "2019-11-27")
 ```
 
 ```{r data-for-is-synth, echo = F, results= T, warning=F}
@@ -392,22 +431,61 @@ control_twoX <- cbind(id, twoX_bsts["created_date"],
                       twoX_bsts["post"], treated)
 
 id <- rep(4,61)
+control_wvsp <- cbind(id, wvsp_bsts["created_date"],
+                        wvsp_bsts["identity_attack"], 
+                        wvsp_bsts["post"], treated)
+
+id <- rep(5,61)
 control_trollX <- cbind(id, trollX_bsts["created_date"],
                         trollX_bsts["identity_attack"], 
                         trollX_bsts["post"], treated)
 
-id <- rep(5,61)
+id <- rep(6,61)
 control_mgtow <- cbind(id, mgtow_bsts["created_date"],
                        mgtow_bsts["identity_attack"],
                        mgtow_bsts["post"], treated)
 
-id <- rep(6,61)
+id <- rep(7,61)
 control_trp <- cbind(id, trp_bsts["created_date"],
                      trp_bsts["identity_attack"], 
                      trp_bsts["post"], treated)
 
-test <- rbind(treated_fds, control_fm, control_twoX, control_trollX,
-              control_mgtow, control_trp)
+#id <- rep(8,61)
+#control_aita <- cbind(id, aita_bsts["created_date"],
+#                     aita_bsts["identity_attack"], 
+#                     aita_bsts["post"], treated)
+
+id <- rep(9,61)
+control_askreddit <- cbind(id, askreddit_bsts["created_date"],
+                     askreddit_bsts["identity_attack"], 
+                     askreddit_bsts["post"], treated)
+
+id <- rep(10,61)
+control_gender <- cbind(id, gender_bsts["created_date"],
+                     gender_bsts["identity_attack"], 
+                    gender_bsts["post"], treated)
+
+#id <- rep(11,61)
+#control_relationship <- cbind(id, relationship_bsts["created_date"],
+#                     relationship_bsts["identity_attack"], 
+#                     relationship_bsts["post"], treated)
+
+#id <- rep(12,61)
+#control_unpopular <- cbind(id, unpopular_bsts["created_date"],
+#                     unpopular_bsts["identity_attack"], 
+#                     unpopular_bsts["post"], treated)
+
+id <- rep(13,61)
+control_purple <- cbind(id, purple_bsts["created_date"],
+                     purple_bsts["identity_attack"], 
+                     purple_bsts["post"], treated)
+
+test <- rbind(treated_fds, control_fm, control_twoX, control_trollX, control_wvsp,
+              control_mgtow, control_trp, #control_aita, 
+              control_askreddit,
+              control_gender, control_relationship, 
+              #control_unpopular, 
+              control_purple)
 
 #ia_m_gsynth <- cbind(rep(1,61), fds_bsts["created_date"],
 #  fds_bsts["identity_attack"], fds_bsts["post"],
@@ -445,7 +523,6 @@ plot(mod, se.method='placebo')
 
 ## H1 - Summary - BSTS {.smaller .scrollable}
 
--   Generic Synthetic Control cannot detect incremental changes in the data
 -   Results of BSTS:
 
 |                                  | 95% Confidence <br>Interval | Posterior <br>Prob. Of <br>Causal Effect |
@@ -457,66 +534,170 @@ plot(mod, se.method='placebo')
 | Identity Attack - Log Score Mean | \[-0.82, -0.073\]           | 99.78%                                   |
 | Identity Attack - Percentage     | \[-0.049, 0.035\]           | 82%                                      |
 
-## BSTS - Identity Attack - Score Mean (1)
+## BSTS - Summary of BSTS communities used for synthetic control
 
-BSTS constructed by number of subscribers and Identity Attack score of r/feminism, r/TwoXChromosomes, r/trollXchromosomes, r/TheRedPill, r/mgtow
+| Community | Gender-focus (F) | Gender-Focus (M) | Add the bot later | Popular |
+|---|---|---|---|---|
+| r/feminism | x |  |  |  |
+| r/twoXchromosomes | x |  |  |  |
+| r/trollXchromosomes | x |  |  |  |
+| r/witchesvspatriarchy | x |  | x |  |
+| r/mgtow |  | x |  |  |
+| r/TheRedPill |  | x |  |  |
+| r/AmItheAsshole |  |  |  | x |
+| r/AskReddit |  |  |  | x |
+| r/gender_critical | x | x |  |  |
+| r/relationship_advice | x |  |  |  |
+| r/unpopular_opinion | x | x |  |  |
+| r/purplepilldebate | x | x |  |  |
+| Model 1 | x | x | x | x |
+| Model 2 | x | x |  | x |
+| Model 3 | x | x |  | x |
+
+## BSTS Model 1 - Identity Attack - Score Mean (1)
 
 ```{r bsts-model-identity-attack-1, echo = FALSE, results = TRUE}
 pre_period <- c(1, 30)
 post_period <- c(31, 61)
 
-identity_attack_m <- cbind(
+identity_attack_m1 <- cbind(
   fds_bsts["identity_attack"], 
   fm_bsts["identity_attack"], fm_subsc["subscriber"],
   twoX_bsts["identity_attack"], twoX_subsc["subscriber"],
   trollX_bsts["identity_attack"], trollX_subsc["subscriber"],
+  wvsp_bsts["identity_attack"], wvsp_subsc["subscriber"],
   mgtow_bsts["identity_attack"], mgtow_subsc["subscriber"],
-  trp_bsts["identity_attack"], trp_subsc["subscriber"]
+  trp_bsts["identity_attack"], trp_subsc["subscriber"],
+  aita_bsts["identity_attack"], aita_subsc["subscriber"],
+  askreddit_bsts["identity_attack"], askreddit_subsc["subscriber"],
+  gender_bsts["identity_attack"], gender_subsc["subscriber"],
+  relationship_bsts["identity_attack"], relationship_subsc["subscriber"],
+  unpopular_bsts["identity_attack"], unpopular_subsc["subscriber"],
+  purple_bsts["identity_attack"], purple_subsc["subscriber"]
   )
 
-names(identity_attack_m) <- c("Y", "fm_ia", "fm_subsc", "twoX_ia","twoX_subsc", 
-                              "trollX_ia", "troll_subsc", "mgtow_ia", "mgtow_subsc", 
-                              "trp_ia", "trp_subsc")
+names(identity_attack_m1) <- c("Y", "fm_ia", "fm_subsc", "twoX_ia","twoX_subsc", 
+                              "trollX_ia", "trollX_subsc", "wvsp_ia", "wvsp_subsc",
+                              "mgtow_ia", "mgtow_subsc", 
+                              "trp_ia", "trp_subsc", "aita_ia", "aita_subsc",
+                              "askreddit_ia", "askreddit_subsc",
+                              "gender_ia", "gender_subsc", "relationship_ia", "relationship_subsc",
+                              "unpopular_ia", "unpopular_subsc", "purple_ia", "purple_subsc")
 
-identity_attack_m_impact <- CausalImpact(identity_attack_m, pre_period,
+identity_attack_m_impact1 <- CausalImpact(identity_attack_m1, pre_period,
                                          post_period, 
                                          model.args = list(niter = 5000, nseasons = 7))
 
-plot(identity_attack_m_impact)
+plot(identity_attack_m_impact1)
 ```
 
-## BSTS - Identity Attack - Score Mean (2)
+## BSTS Model 1 - Identity Attack - Score Mean (2)
 
 ```{r bsts-model-identity-attack-2, echo = FALSE, results = TRUE}
-summary(identity_attack_m_impact)
+summary(identity_attack_m_impact1)
 ```
 
-## BSTS - Identity Attack - Log Score Mean (3)
+## BSTS Model 1 - Identity Attack - Log Score Mean (1)
 
 ```{r bsts-identity-log-1, echo = F, results = F}
-l.identity_attack_m <- identity_attack_m %>% 
+l.identity_attack_m1 <- identity_attack_m1 %>% 
+  mutate(Y = log(Y),
+         l.fm_ia = log(fm_ia), 
+         l.twoX_ia = log(twoX_ia),
+         l.trollX_ia = log(trollX_ia),
+         l.wvsp_ia = log(wvsp_ia),
+         l.mgtow_ia = log(mgtow_ia),
+         l.trp_ia = log(trp_ia),
+         l.iata_ia = log(iata_ia),
+         l.askreddit_ia = log(ask_ia),
+         l.gender_ia = log(gender_ia),
+         l.relationship_ia = log(relationship_ia),
+         l.unpopular_ia = log(unpopular_ia),
+         l.purple_ia = log(purple_ia))
+
+l.identity_attack_m_impact1 <- CausalImpact(l.identity_attack_m1, pre_period,
+                                         post_period, 
+                                         model.args = list(niter = 5000, nseasons = 7))
+
+plot(l.identity_attack_m_impact1)
+```
+
+## BSTS Model 1 - Identity Attack - Log Score Mean (2)
+
+```{r bsts-identity-log-2, echo = F, results = T}
+summary(l.identity_attack_m_impact1)
+```
+
+## BSTS Model 2 - Identity Attack - Score Mean (1)
+
+```{r bsts-model2-identity-attack-1, echo = FALSE, results = TRUE}
+identity_attack_m2 <- cbind(
+  fds_bsts["identity_attack"], 
+  fm_bsts["identity_attack"], fm_subsc["subscriber"],
+  twoX_bsts["identity_attack"], twoX_subsc["subscriber"],
+  mgtow_bsts["identity_attack"], mgtow_subsc["subscriber"],
+  trp_bsts["identity_attack"], trp_subsc["subscriber"],
+  askreddit_bsts["identity_attack"], askreddit_subsc["subscriber"],
+  gender_bsts["identity_attack"], gender_subsc["subscriber"],
+  relationship_bsts["identity_attack"], relationship_subsc["subscriber"],
+  unpopular_bsts["identity_attack"], unpopular_subsc["subscriber"],
+  purple_bsts["identity_attack"], purple_subsc["subscriber"]
+  )
+
+names(identity_attack_m2) <- c("Y", "fm_ia", "fm_subsc", "twoX_ia","twoX_subsc", 
+                               "mgtow_ia", "mgtow_subsc", 
+                              "trp_ia", "trp_subsc", "aita_ia", "aita_subsc",
+                              "askreddit_ia", "askreddit_subsc",
+                              "gender_ia", "gender_subsc", "relationship_ia", "relationship_subsc",
+                              "unpopular_ia", "unpopular_subsc", "purple_ia", "purple_subsc")
+
+identity_attack_m_impact2 <- CausalImpact(identity_attack_m1, pre_period,
+                                         post_period, 
+                                         model.args = list(niter = 5000, nseasons = 7))
+
+plot(identity_attack_m_impact2)
+```
+
+
+## BSTS Model 2 - Identity Attack - Score Mean (2)
+
+```{r bsts-model2-identity-attack-2, echo = FALSE, results = TRUE}
+summary(identity_attack_m_impact2)
+```
+
+## BSTS Model 2 - Identity Attack - Log Score Mean (1)
+
+```{r bsts-model2-identity-log-1, echo = F, results = F}
+l.identity_attack_m2 <- identity_attack_m2 %>% 
   mutate(Y = log(Y),
          l.fm_ia = log(fm_ia), 
          l.twoX_ia = log(twoX_ia),
          l.trollX_ia = log(trollX_ia),
          l.mgtow_ia = log(mgtow_ia),
-         l.trp_ia = log(trp_ia))
+         l.trp_ia = log(trp_ia),
+         l.iata_ia = log(iata_ia),
+         l.askreddit_ia = log(ask_ia),
+         l.gender_ia = log(gender_ia),
+         l.relationship_ia = log(relationship_ia),
+         l.unpopular_ia = log(unpopular_ia),
+         l.purple_ia = log(purple_ia))
 
-l.identity_attack_m_impact <- CausalImpact(l.identity_attack_m, pre_period,
+l.identity_attack_m_impact2 <- CausalImpact(l.identity_attack_m2, pre_period,
                                          post_period, 
                                          model.args = list(niter = 5000, nseasons = 7))
 
-plot(l.identity_attack_m_impact)
+plot(l.identity_attack_m_impact2)
 ```
 
-## BSTS - Identity Attack - Log Score Mean (4)
+## BSTS Model 2 - Identity Attack - Log Score Mean (2)
 
-```{r bsts-identity-log-3, echo = F, results = T}
-summary(l.identity_attack_m_impact)
+```{r bsts-model2-identity-attack-2, echo = FALSE, results = TRUE}
+summary(l.identity_attack_m_impact2)
 ```
 
-## BSTS - Identity Attack - Percentage (5)
+## BSTS - Identity Attack - Percentage 
 
+All percentage Not updated yet, 6 new community does not have a threshhold yet
 ```{r clean-data-for-bsts-perc-2, echo = F, results = T}
 identity_attack_f <- cbind(
   fds_bsts["identity_attack_p"], 
@@ -537,8 +718,8 @@ identity_attack_f_impact <- CausalImpact(identity_attack_f, pre_period, post_per
 plot(identity_attack_f_impact)
 ```
 
-## BSTS - Identity Attack - Percentage (6)
-
+## BSTS - Identity Attack - Percentage
+Not updated yet, 6 new community does not have a threshhold yet
 ```{r bsts-model-identity-attack-perc-2, echo = F, results = T}
 summary(identity_attack_f_impact)
 ```
@@ -629,9 +810,50 @@ summary(insult_f_impact)
 
 H2: The harassment towards other outgroup members will increase in community discussion after the implementation of the bot. Plan: - Using topic modeling to classify the target in each comment - Aggregating scores for comments targeting women and men before and after the bot implementaiton - Identifying Causal effect with BSTS on topics targeting men
 
-## H3 - Analysis Plan
+## H3 - Analysis - r/feminism
 
-H3: After the implementation of the bot, communities with similar topics and without bot moderation (human-only moderated communities) will experience an increase in harassment Plan: - Monitor the neighbor communities one, two, three months after focal's community implementation
+```{r fm-discontinuity}
+fm_bsts %>% group_by(created_date) %>%
+  summarise(identity_attack = mean(identity_attack), relative_day = relative_day) %>%
+  filter(relative_day > -16 & relative_day < 16) %>%
+  dplyr::select(identity_attack, relative_day) %>%
+  mutate(threshold = as.factor(ifelse(relative_day >= 0, 1, 0))) %>%
+  ggplot(aes(x = relative_day, y = identity_attack, color = threshold)) +
+  geom_point() +
+  geom_smooth(method = 'lm',se = T) +
+  scale_color_brewer(palette = "Accent") +
+  guides(color = FALSE) +
+  geom_vline(xintercept = -0.5, color = "red",
+             size = 1, linetype = "dashed") +
+  labs(y = "Identity Attack Comments", 
+       x = "Days Since Treatment",
+       title ="Discontinuity in Identity Attack") + 
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"))
+```
+## H3 - Analysis - r/feminism
+```{r fm-identity-attack-plot, echo = F, results = T}
+m_bsts %>%
+  filter(relative_day > -5 & relative_day < 5) %>%
+  dplyr::select(identity_attack, relative_day) %>%
+  mutate(threshold = as.factor(ifelse(relative_day >= 0, 1, 0))) %>%
+  ggplot(aes(x = relative_day, y = identity_attack, color = threshold)) +
+  geom_point() +
+  geom_smooth(method = 'lm',se = T) +
+  scale_color_brewer(palette = "Accent") +
+  guides(color = FALSE) +
+  geom_vline(xintercept = -0.5, color = "red",
+             size = 1, linetype = "dashed") +
+  labs(y = "Identity Attack Comments", 
+       x = "Days Since Treatment",
+       title ="Discontinuity in Identity Attack") + 
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"))
+```
 
 # Appendix
 
