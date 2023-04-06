@@ -10,9 +10,9 @@ With respect to detoxify.ipynb
 |-----|------------------------|-------------|----------------|-----------------------------|---------------|----------------------------|---------------|
 | 1   | r/femaledatingstrategy | Comments    | 16,028         | 13,485                      | 31,357        | 23,149                     | Oct 28, 2019<br>1572234835  |
 |     |                        | Submissions | 894            | 432 (Text)<br>159(Images)   | 1901          | 596 (Text)<br>432 (Images) |               |
-| 2   | r/women                | Comments    | 271            | 214                         | 201           | 154                        | June 27, 2016 <br>1608652031 |
+| 2   | r/women                | Comments    | 271            | 214                         | 201           | 154                        | June 27, 2016 <br>1467041290 |
 |     |                        | Submissions | 550            | 15 (Text)<br>11 (Images)    | 682           | 11 (Text)<br>7 (Images)    |               |
-| 3   | r/feminisms            | Comments    | 1,288          | 906                         | 1,152         | 899                        | Mar 17, 2012 <br>1608651970  |
+| 3   | r/feminisms            | Comments    | 1,288          | 906                         | 1,152         | 899                        | Mar 17, 2012 <br>1332000605  |
 |     |                        | Submissions | 328            | 19 (Text)<br>4 (Images)     | 244           | 16 (Text)<br>5 (Images)    |               |
 | 4   | r/wgtow                | Comments    | 842            | 763                         | 1,285         | 1164                       | Apr 29, 2021 <br>1619702031 |
 |     |                        | Submissions | 87             | 34 (Text)<br>7 (Images)     | 135           | 61 (Text)<br>22 (Images)   |               |
