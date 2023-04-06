@@ -16,7 +16,7 @@ With respect to detoxify.ipynb
 |     |                        | Submissions | 328            | 19 (Text)<br>4 (Images)     | 244           | 16 (Text)<br>5 (Images)    |               |
 | 4   | r/wgtow                | Comments    | 842            | 763                         | 1,285         | 1164                       | Apr 29, 2021  |
 |     |                        | Submissions | 87             | 34 (Text)<br>7 (Images)     | 135           | 61 (Text)<br>22 (Images)   |               |
-| 5   | r/WitchesVSPatriarchy  | Comments    | 23,015         | 15,610                      | 20,879        | 20,879                     | Dec 22, 2020  |
+| 5   | r/WitchesVSPatriarchy  | Comments    | 23,015         | 15,610                      | 20,879        | 20,879                     | Dec 22, 2020 <br>1608652060<\br>  |
 |     |                        | Submissions | 1,664          | 238(Text)<br>1,004 (Images) | 1,411         | 175 (Text)<br>894 (Images) |               |
 | 6   | r/exfds                | Comments    | 468            | 452                         | 132           | 127                        | Nov 23, 2020  |
 |     |                        | Submissions | 32             | 15 (Text)<br>10 (Images)    | 12            | 20 (Text)<br>3 (Images)    |               |
