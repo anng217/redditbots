@@ -10,15 +10,15 @@ With respect to detoxify.ipynb
 |-----|------------------------|-------------|----------------|-----------------------------|---------------|----------------------------|---------------|
 | 1   | r/femaledatingstrategy | Comments    | 16,028         | 13,485                      | 31,357        | 23,149                     | Oct 28, 2019<br>1572234835  |
 |     |                        | Submissions | 894            | 432 (Text)<br>159(Images)   | 1901          | 596 (Text)<br>432 (Images) |               |
-| 2   | r/women                | Comments    | 271            | 214                         | 201           | 154                        | June 27, 2016 |
+| 2   | r/women                | Comments    | 271            | 214                         | 201           | 154                        | June 27, 2016 <br>1608652031 |
 |     |                        | Submissions | 550            | 15 (Text)<br>11 (Images)    | 682           | 11 (Text)<br>7 (Images)    |               |
-| 3   | r/feminisms            | Comments    | 1,288          | 906                         | 1,152         | 899                        | Mar 17, 2012  |
+| 3   | r/feminisms            | Comments    | 1,288          | 906                         | 1,152         | 899                        | Mar 17, 2012 <br>1608651970  |
 |     |                        | Submissions | 328            | 19 (Text)<br>4 (Images)     | 244           | 16 (Text)<br>5 (Images)    |               |
-| 4   | r/wgtow                | Comments    | 842            | 763                         | 1,285         | 1164                       | Apr 29, 2021  |
+| 4   | r/wgtow                | Comments    | 842            | 763                         | 1,285         | 1164                       | Apr 29, 2021 <br>1619702031 |
 |     |                        | Submissions | 87             | 34 (Text)<br>7 (Images)     | 135           | 61 (Text)<br>22 (Images)   |               |
-| 5   | r/WitchesVSPatriarchy  | Comments    | 23,015         | 15,610                      | 20,879        | 20,879                     | Dec 22, 2020 <br>1608652060<\br>  |
+| 5   | r/WitchesVSPatriarchy  | Comments    | 23,015         | 15,610                      | 20,879        | 20,879                     | Dec 22, 2020 <br>1608652060  |
 |     |                        | Submissions | 1,664          | 238(Text)<br>1,004 (Images) | 1,411         | 175 (Text)<br>894 (Images) |               |
-| 6   | r/exfds                | Comments    | 468            | 452                         | 132           | 127                        | Nov 23, 2020  |
+| 6   | r/exfds                | Comments    | 468            | 452                         | 132           | 127                        | Nov 23, 2020 <br> 1606160912 |
 |     |                        | Submissions | 32             | 15 (Text)<br>10 (Images)    | 12            | 20 (Text)<br>3 (Images)    |               |
 
 **Files and folders:**
