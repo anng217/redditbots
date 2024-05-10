@@ -53,21 +53,6 @@
 
 
 ## Concerns:
-- Recover deleted comments
-- Upvote for comments
-- Upvote for submissions
-- Non-text submissions
-- Clean internet characters
-
-## Reddit REST API: [My Apps](https://www.reddit.com/prefs/apps) | [Endpoints](https://www.reddit.com/dev/api/oauth)
-
-| App Name      | babi_research                  | mia_research                   |
-|---------------|--------------------------------|--------------------------------|
-| App Type      | Personal Use Script            | Web App                        |
-| Client Secret | 9xuueIhFmNnf2DhSf8I_Ggn0AO6psA | up4Pj6q6JD0T2hZ6Pjzwl_JCTu3jbA |
-| Key           | B4zgdtXspxBb0Gj3CFiDYQ         | F3DXdvllALqoFJ7KUfw7sg         |
-| About URL     | https://github.com/anng217     | https://github.com/anng217     |
-| Redirect URI  | http://localhost:8080          | http://localhost:8080          |
 
 ## PRAW: [Newest documentation](https://praw.readthedocs.io/en/latest/index.html)
 !!!Caution!!!: Install the latest version and follow the latest documentation
